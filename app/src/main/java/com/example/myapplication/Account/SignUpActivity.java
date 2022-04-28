@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Account;
 
 
 import androidx.annotation.NonNull;
@@ -11,7 +11,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.myapplication.databinding.ActivityLoginBinding;
+import com.example.myapplication.Note.MainActivity;
 import com.example.myapplication.databinding.ActivitySignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +26,6 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
 

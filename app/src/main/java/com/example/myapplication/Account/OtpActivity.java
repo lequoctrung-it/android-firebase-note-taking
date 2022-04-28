@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.Account;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,10 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myapplication.databinding.ActivityLoginBinding;
+import com.example.myapplication.Note.MainActivity;
 import com.example.myapplication.databinding.ActivityOtpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

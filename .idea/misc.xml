@@ -3,12 +3,43 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_add_button.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_delete.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_dialog.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_done_button.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_miscellaneous.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note_color.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note_color_1.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note_color_2.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note_color_3.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note_color_4.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_note_color_5.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_search.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_subtitle_indicator.xml" value="0.1375" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/home.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_baseline_format_list_bulleted_24.xml" value="0.1455" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/label.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/rounded_edittext.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/selector.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_editor_note.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_forgot_password.xml" value="0.1334853090172239" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_login.xml" value="0.24" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_main.xml" value="0.1334853090172239" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_otp.xml" value="0.14150943396226415" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_reset_password_otp.xml" value="0.16983695652173914" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/app_bar_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/fragment_home.xml" value="0.2667572463768116" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/fragment_label.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/item_container_note.xml" value="0.176" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/layout_delete_note.xml" value="0.2" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/layout_miscellaneous.xml" value="0.1" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/menu/action_menu_main_activity.xml" value="0.264" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/menu/bottom_nav_menu.xml" value="0.27447916666666666" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/menu/navigation_menu.xml" value="0.2351851851851852" />
       </map>
     </option>
   </component>
