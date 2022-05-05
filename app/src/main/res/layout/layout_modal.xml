@@ -2,27 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layoutMiscellaneous"
+    android:id="@+id/ll_modal"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="@drawable/background_miscellaneous"
+    android:background="@drawable/background_modal"
     android:layout_height="wrap_content"
     app:behavior_peekHeight="@dimen/_40sdp"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
     <TextView
-        android:id="@+id/textMiscellaneous"
+        android:id="@+id/tv_modal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
         android:fontFamily="@font/poppins_medium"
         android:gravity="center"
         android:includeFontPadding="false"
-        android:text="@string/miscellaneous"
-        android:textColor="@color/colorWhite"
+        android:text="@string/modal_title"
+        android:textColor="@color/color_white"
         android:textSize="@dimen/_13ssp" />
 
     <LinearLayout
-        android:id="@+id/layoutNoteColor"
+        android:id="@+id/ll_note_color"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_10sdp"
@@ -35,19 +35,19 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor1"
+                android:id="@+id/v_color_1"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/background_note_color_1" />
 
             <ImageView
-                android:id="@+id/imageColor1"
+                android:id="@+id/iv_color_1"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
                 android:src="@drawable/ic_done"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/color_white" />
         </FrameLayout>
 
         <FrameLayout
@@ -56,18 +56,18 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor2"
+                android:id="@+id/v_color_2"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/background_note_color_2" />
 
             <ImageView
-                android:id="@+id/imageColor2"
+                android:id="@+id/iv_color_2"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/color_white" />
         </FrameLayout>
 
         <FrameLayout
@@ -76,18 +76,18 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor3"
+                android:id="@+id/v_color_3"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/background_note_color_3" />
 
             <ImageView
-                android:id="@+id/imageColor3"
+                android:id="@+id/iv_color_3"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/color_white" />
         </FrameLayout>
 
         <FrameLayout
@@ -96,18 +96,18 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor4"
+                android:id="@+id/v_color_4"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/background_note_color_4" />
 
             <ImageView
-                android:id="@+id/imageColor4"
+                android:id="@+id/iv_color_4"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/color_white" />
         </FrameLayout>
 
         <FrameLayout
@@ -116,18 +116,18 @@
             android:layout_weight="1">
 
             <View
-                android:id="@+id/viewColor5"
+                android:id="@+id/v_color_5"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:background="@drawable/background_note_color_5" />
 
             <ImageView
-                android:id="@+id/imageColor5"
+                android:id="@+id/iv_color_5"
                 android:layout_width="@dimen/_35sdp"
                 android:layout_height="@dimen/_35sdp"
                 android:contentDescription="@string/app_name"
                 android:padding="@dimen/_10sdp"
-                app:tint="@color/colorWhite" />
+                app:tint="@color/color_white" />
         </FrameLayout>
 
         <TextView
@@ -136,12 +136,12 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="@string/pick_color"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/color_white"
             android:textSize="@dimen/_13ssp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutAddImage"
+        android:id="@+id/ll_add_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
         android:layout_margin="@dimen/_10sdp"
@@ -154,7 +154,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_image"
-            app:tint="@color/colorIcons" />
+            app:tint="@color/color_icons" />
 
         <TextView
             android:layout_width="match_parent"
@@ -162,13 +162,13 @@
             android:layout_marginStart="@dimen/_10sdp"
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
-            android:text="@string/add_image"
-            android:textColor="@color/colorIcons"
+            android:text="@string/add_media"
+            android:textColor="@color/color_icons"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutDeleteNote"
+        android:id="@+id/ll_delete_note"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_35sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
@@ -183,7 +183,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_delete"
-            app:tint="@color/colorDelete" />
+            app:tint="@color/color_delete" />
 
         <TextView
             android:layout_width="match_parent"
@@ -192,7 +192,7 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="@string/delete_note"
-            android:textColor="@color/colorDelete"
+            android:textColor="@color/color_delete"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 

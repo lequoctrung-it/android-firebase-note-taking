@@ -1,14 +1,16 @@
 package com.example.myapplication.Adapters;
 
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.media.ThumbnailUtils;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,9 +22,9 @@ import com.example.myapplication.Listeners.NotesListener;
 import com.example.myapplication.R;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -48,7 +50,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         holder.setNote(notes.get(position));
-        holder.layoutNote.setOnClickListener(v -> {
+        holder.llNote.setOnClickListener(v -> {
             notesListener.onNoteClicked(notes.get(position), position);
         });
     }
@@ -64,41 +66,60 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     static class NoteViewHolder extends RecyclerView.ViewHolder {
-        TextView textTitle, textSubtitle, textDateTime;
-        LinearLayout layoutNote;
-        RoundedImageView imageNote;
+        TextView tvTitle, tvSubtitle, tvDateTime;
+        LinearLayout llNote;
+        RoundedImageView rivNote;
 
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
-            textTitle = itemView.findViewById(R.id.textTitle);
-            textSubtitle = itemView.findViewById(R.id.textSubtitle);
-            textDateTime = itemView.findViewById(R.id.textDateTime);
-            layoutNote = itemView.findViewById(R.id.layoutNote);
-            imageNote = itemView.findViewById(R.id.imageNote);
+            tvTitle = itemView.findViewById(R.id.tv_title);
+            tvSubtitle = itemView.findViewById(R.id.tv_subtitle);
+            tvDateTime = itemView.findViewById(R.id.tv_date_time);
+            llNote = itemView.findViewById(R.id.ll_note);
+            rivNote = itemView.findViewById(R.id.riv_note);
         }
 
         void setNote(Note note) {
-            textTitle.setText(note.getTitle());
+            // Display note title
+            tvTitle.setText(note.getTitle());
+
+            // Display note subtitle
             if (note.getSubtitle().trim().isEmpty()) {
-                textSubtitle.setVisibility(View.GONE);
+                tvSubtitle.setVisibility(View.GONE);
             }else {
-                textSubtitle.setText(note.getSubtitle());
+                tvSubtitle.setText(note.getSubtitle());
             }
-            textDateTime.setText(note.getDateTime());
-            GradientDrawable gradientDrawable = (GradientDrawable) layoutNote.getBackground();
+
+            // Display date time
+            tvDateTime.setText(note.getDateTime());
+
+            // Apply note color to layout
+            GradientDrawable gradientDrawable = (GradientDrawable) llNote.getBackground();
             if (note.getColor() != null) {
                 gradientDrawable.setColor(Color.parseColor(note.getColor()));
             }else {
                 gradientDrawable.setColor(Color.parseColor("#333333"));
             }
 
+            // Set layout to display note with/without media
             if (note.getImagePath() != null) {
-                imageNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
-                imageNote.setVisibility(View.VISIBLE);
+                if (isVideoFile(note.getImagePath())) {
+                    // Create an thumbnail for video
+                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(note.getImagePath(), MediaStore.Video.Thumbnails.MINI_KIND);
+                    rivNote.setImageBitmap(bMap);
+                }else {
+                    rivNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
+                }
+                rivNote.setVisibility(View.VISIBLE);
             }else {
-                imageNote.setVisibility(View.GONE);
+                rivNote.setVisibility(View.GONE);
             }
         }
+    }
+
+    public static boolean isVideoFile(String path) {
+        String mimeType = URLConnection.guessContentTypeFromName(path);
+        return mimeType != null && mimeType.startsWith("video");
     }
 
     public void searchNotes(final String searchKeyword) {

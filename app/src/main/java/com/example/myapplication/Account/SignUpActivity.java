@@ -50,55 +50,55 @@ public class SignUpActivity extends AppCompatActivity {
         //Firebase authentication
         mAuth = FirebaseAuth.getInstance();
 
-        binding.loginTextview.setOnClickListener(v -> {
+        binding.tvLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
         });
 
-        binding.signupBtn.setOnClickListener(v -> {
+        binding.btnSignup.setOnClickListener(v -> {
             validateForm();
         });
     }
 
     private void validateForm() {
-        String email_phoneNumber = binding.signupEmailPhoneEdittext.getText().toString().trim();
-        String password = binding.signupPasswordEdittext.getText().toString().trim();
-        String reenter_password = binding.signupReenterPasswordEdittext.getText().toString().trim();
+        String email_phoneNumber = binding.etSignupEmailPhone.getText().toString().trim();
+        String password = binding.etSignupPassword.getText().toString().trim();
+        String reenter_password = binding.etSignupReenterPassword.getText().toString().trim();
 
         if (email_phoneNumber.isEmpty()) {
-            binding.signupEmailPhoneEdittext.setError("Please enter your email or phone number");
-            binding.signupEmailPhoneEdittext.requestFocus();
+            binding.etSignupEmailPhone.setError("Please enter your email or phone number");
+            binding.etSignupEmailPhone.requestFocus();
             return;
         }
 
         if (!email_phoneNumber.matches(PHONE_REGEX)) {
             if (!Patterns.EMAIL_ADDRESS.matcher(email_phoneNumber).matches()) {
-                binding.signupEmailPhoneEdittext.setError("Please provide valid email or phone number(start with +84)");
-                binding.signupEmailPhoneEdittext.requestFocus();
+                binding.etSignupEmailPhone.setError("Please provide valid email or phone number(start with +84)");
+                binding.etSignupEmailPhone.requestFocus();
                 return;
             }
         }
 
         if (password.isEmpty()) {
-            binding.signupPasswordEdittext.setError("Please enter your password");
-            binding.signupPasswordEdittext.requestFocus();
+            binding.etSignupPassword.setError("Please enter your password");
+            binding.etSignupPassword.requestFocus();
             return;
         }
 
         if (password.length() < 8) {
-            binding.signupPasswordEdittext.setError("Your password should be more than 8 characters");
-            binding.signupPasswordEdittext.requestFocus();
+            binding.etSignupPassword.setError("Your password should be more than 8 characters");
+            binding.etSignupPassword.requestFocus();
             return;
         }
 
         if (reenter_password.isEmpty()) {
-            binding.signupReenterPasswordEdittext.setError("Please enter your password again");
-            binding.signupReenterPasswordEdittext.requestFocus();
+            binding.etSignupReenterPassword.setError("Please enter your password again");
+            binding.etSignupReenterPassword.requestFocus();
             return;
         }
 
         if (!password.equals(reenter_password)) {
-            binding.signupReenterPasswordEdittext.setError("Please make sure your passwords match ");
-            binding.signupReenterPasswordEdittext.requestFocus();
+            binding.etSignupReenterPassword.setError("Please make sure your passwords match ");
+            binding.etSignupReenterPassword.requestFocus();
             return;
         }
 

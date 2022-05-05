@@ -49,19 +49,19 @@ public class OtpActivity extends AppCompatActivity {
 
         getDataIntent();
 
-        binding.verifyOtpBtn.setOnClickListener(v -> {
-            if (binding.otpEdittext.getText().toString().isEmpty()) {
-                binding.otpEdittext.setError("OTP required!");
+        binding.btnVerifyOtp.setOnClickListener(v -> {
+            if (binding.etOtp.getText().toString().isEmpty()) {
+                binding.etOtp.setError("OTP required!");
                 return;
             }
 
             if (mVerificationId != null) {
-                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, binding.otpEdittext.getText().toString());
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, binding.etOtp.getText().toString());
                 signInWithPhoneAuthCredential(credential, mPassword);
             }
         });
 
-        binding.resendOtpTextview.setOnClickListener(v -> {
+        binding.tvResendOtp.setOnClickListener(v -> {
             PhoneAuthOptions options =
                     PhoneAuthOptions.newBuilder(mAuth)
                             .setPhoneNumber(mPhoneNumber)

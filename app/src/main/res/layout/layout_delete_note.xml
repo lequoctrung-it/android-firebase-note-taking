@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/layoutDeleteNoteContainer"
+    android:id="@+id/cl_delete_note_container"
     android:layout_gravity="center"
     android:layout_margin="@dimen/_10sdp"
     android:background="@drawable/background_dialog">
 
     <ImageView
-        android:id="@+id/imageDeleteNote"
+        android:id="@+id/iv_delete_note"
         android:layout_width="@dimen/_25sdp"
         android:layout_height="@dimen/_25sdp"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginTop="@dimen/_8sdp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_delete"
-        app:tint="@color/colorWhite"
+        app:tint="@color/color_white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,15 +27,15 @@
         android:fontFamily="@font/poppins_bold"
         android:includeFontPadding="false"
         android:text="@string/delete_note"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_white"
         android:textSize="@dimen/_14ssp"
-        app:layout_constraintBottom_toBottomOf="@id/imageDeleteNote"
+        app:layout_constraintBottom_toBottomOf="@id/iv_delete_note"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageDeleteNote"
-        app:layout_constraintTop_toTopOf="@id/imageDeleteNote" />
+        app:layout_constraintStart_toEndOf="@id/iv_delete_note"
+        app:layout_constraintTop_toTopOf="@id/iv_delete_note" />
 
     <TextView
-        android:id="@+id/textDeleteNoteMessage"
+        android:id="@+id/tv_delete_note_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_8sdp"
@@ -45,12 +45,12 @@
         android:includeFontPadding="false"
         android:paddingHorizontal="@dimen/_8sdp"
         android:text="@string/are_you_sure_you_want_to_delete_this_note"
-        android:textColor="@color/colorWhite"
+        android:textColor="@color/color_white"
         android:textSize="@dimen/_13ssp"
-        app:layout_constraintTop_toBottomOf="@id/imageDeleteNote" />
+        app:layout_constraintTop_toBottomOf="@id/iv_delete_note" />
 
     <TextView
-        android:id="@+id/textDeleteNote"
+        android:id="@+id/tv_delete_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_8sdp"
@@ -60,14 +60,14 @@
         android:paddingHorizontal="@dimen/_8sdp"
         android:text="@string/delete_note"
         android:textAllCaps="true"
-        android:textColor="@color/colorDelete"
+        android:textColor="@color/color_delete"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textDeleteNoteMessage" />
+        app:layout_constraintTop_toBottomOf="@id/tv_delete_note_message" />
 
     <TextView
-        android:id="@+id/textCancel"
+        android:id="@+id/tv_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/_8sdp"
@@ -76,11 +76,11 @@
         android:includeFontPadding="false"
         android:padding="@dimen/_8sdp"
         android:text="@string/cancel_dialog"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/color_accent"
         android:textSize="@dimen/_13ssp"
         android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/textDeleteNote"
-        app:layout_constraintTop_toBottomOf="@id/textDeleteNoteMessage" />
+        app:layout_constraintEnd_toStartOf="@id/tv_delete_note"
+        app:layout_constraintTop_toBottomOf="@id/tv_delete_note_message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,46 +34,46 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        binding.signupTextview.setOnClickListener(v -> {
+        binding.tvSignup.setOnClickListener(v -> {
             startActivity(new Intent(this, SignUpActivity.class));
         });
 
-        binding.loginBtn.setOnClickListener(v -> {
+        binding.btnLogin.setOnClickListener(v -> {
             validateForm();
         });
 
-        binding.forgotPasswordTextview.setOnClickListener(v -> {
+        binding.tvForgotPassword.setOnClickListener(v -> {
             startActivity(new Intent(this, ForgotPasswordActivity.class));
         });
     }
 
     private void validateForm() {
-        String email_phoneNumber = binding.loginEmailPhoneEdittext.getText().toString().trim();
-        String password = binding.loginPasswordEdittext.getText().toString().trim();
+        String email_phoneNumber = binding.etLoginEmailPhone.getText().toString().trim();
+        String password = binding.etLoginEmailPhone.getText().toString().trim();
 
         if (email_phoneNumber.isEmpty()) {
-            binding.loginEmailPhoneEdittext.setError("Please enter your email or phone number");
-            binding.loginEmailPhoneEdittext.requestFocus();
+            binding.etLoginEmailPhone.setError("Please enter your email or phone number");
+            binding.etLoginEmailPhone.requestFocus();
             return;
         }
 
         if (!email_phoneNumber.matches(PHONE_REGEX)) {
             if (!Patterns.EMAIL_ADDRESS.matcher(email_phoneNumber).matches()) {
-                binding.loginEmailPhoneEdittext.setError("Please provide valid email or phone number(start with +84)");
-                binding.loginEmailPhoneEdittext.requestFocus();
+                binding.etLoginEmailPhone.setError("Please provide valid email or phone number(start with +84)");
+                binding.etLoginEmailPhone.requestFocus();
                 return;
             }
         }
 
         if (password.isEmpty()) {
-            binding.loginPasswordEdittext.setError("Please enter your password");
-            binding.loginPasswordEdittext.requestFocus();
+            binding.etLoginEmailPhone.setError("Please enter your password");
+            binding.etLoginEmailPhone.requestFocus();
             return;
         }
 
         if (password.length() < 8) {
-            binding.loginPasswordEdittext.setError("Your password should be more than 8 characters");
-            binding.loginPasswordEdittext.requestFocus();
+            binding.etLoginEmailPhone.setError("Your password should be more than 8 characters");
+            binding.etLoginEmailPhone.requestFocus();
             return;
         }
 

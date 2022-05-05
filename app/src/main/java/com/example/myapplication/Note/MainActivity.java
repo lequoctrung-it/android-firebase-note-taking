@@ -2,6 +2,8 @@ package com.example.myapplication.Note;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -24,36 +26,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NotesListener {
+    // Declare and initialize constant variables
     public static final int REQUEST_CODE_ADD_NOTE = 1;
     public static final int REQUEST_CODE_UPDATE_NOTE = 2;
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
 
-    private RecyclerView notesRecyclerView;
-    private List<Note> noteList;
-    private NotesAdapter notesAdapter;
+    // Declare variables for views
+    private RecyclerView rcNotes;
+    private ImageView ivAddNewNote, ivChangeLayout;
+    private EditText etSearch;
 
+    // Others
+    private NotesAdapter notesAdapter;
+    private List<Note> noteList;
     private int noteClickedPosition = -1;
+    private boolean flag = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageView imageAddNoteMain = findViewById(R.id.imageAddNoteMain);
-        imageAddNoteMain.setOnClickListener(v -> {
+        initializeViews();
+
+        manipulateViews();
+
+        getNotes(REQUEST_CODE_SHOW_NOTES, false);
+    }
+
+    private void manipulateViews() {
+        rcNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        rcNotes.setAdapter(notesAdapter);
+
+        // FAB add new note
+        ivAddNewNote.setOnClickListener(v -> {
             startActivityForResult(new Intent(getApplicationContext(), EditorNoteActivity.class), REQUEST_CODE_ADD_NOTE);
         });
 
-        notesRecyclerView = findViewById(R.id.notesRecyclerView);
-        notesRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        noteList = new ArrayList<>();
-        notesAdapter = new NotesAdapter(noteList, this);
-        notesRecyclerView.setAdapter(notesAdapter);
+        // Switch layout button
+        ivChangeLayout.setOnClickListener(v -> {
+            if (flag == true) {
+                rcNotes.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+                ivChangeLayout.setImageResource(R.drawable.ic_list);
+            } else {
+                rcNotes.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+                ivChangeLayout.setImageResource( R.drawable.ic_grid);
+            }
+            flag = !flag;
+        });
 
-        getNotes(REQUEST_CODE_SHOW_NOTES, false);
-
-        EditText inputSearch = findViewById(R.id.inputSearch);
-        inputSearch.addTextChangedListener(new TextWatcher() {
+        // Search bar
+        etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -73,17 +96,27 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         });
     }
 
+    private void initializeViews() {
+        noteList = new ArrayList<>();
+        ivAddNewNote = findViewById(R.id.iv_add_new_note);
+        ivChangeLayout = findViewById(R.id.iv_change_layout);
+        etSearch = findViewById(R.id.et_search);
+        rcNotes = findViewById(R.id.rc_notes);
+        notesAdapter = new NotesAdapter(noteList, this);
+    }
+
     @Override
     public void onNoteClicked(Note note, int position) {
         noteClickedPosition = position;
-        Intent intent = new Intent(getApplicationContext(), EditorNoteActivity.class);
-        intent.putExtra("isViewOrUpdate", true);
-        intent.putExtra("note", note);
-        startActivityForResult(intent, REQUEST_CODE_UPDATE_NOTE);
+        startActivityForResult(
+                new Intent(getApplicationContext(), EditorNoteActivity.class)
+                        .putExtra("isViewOrUpdate", true)
+                        .putExtra("note", note),
+                REQUEST_CODE_UPDATE_NOTE
+        );
     }
 
     private void getNotes(final int requestCode, final boolean isNoteDeleted) {
-
         // Just like addNote we have to use AsyncTask to getNote
         @SuppressLint("StaticFieldLeak")
         class GetNotesTask extends AsyncTask<Void, Void, List<Note>> {
@@ -106,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     // Case add note: just insert note to position 0 and scroll to top
                     noteList.add(0, notes.get(0));
                     notesAdapter.notifyItemInserted(0);
-                    notesRecyclerView.smoothScrollToPosition(0);
+                    rcNotes.smoothScrollToPosition(0);
                 } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
                     // Case update note: remove the old note and add new note
                     noteList.remove(noteClickedPosition);

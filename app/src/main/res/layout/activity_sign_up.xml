@@ -28,42 +28,42 @@
             android:layout_marginBottom="30sp"/>
 
         <EditText
-            android:id="@+id/signup_emailPhone_edittext"
+            android:id="@+id/et_signup_email_phone"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Email/Phone Number"
-            android:textColorHint="@color/colorGrey"
-            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/color_grey"
+            android:textColor="@color/color_black"
             android:padding="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_edittext"/>
 
         <EditText
-            android:id="@+id/signup_password_edittext"
+            android:id="@+id/et_signup_password"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:textColorHint="@color/colorGrey"
-            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/color_grey"
+            android:textColor="@color/color_black"
             android:padding="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_edittext"
             android:inputType="textPassword" />
 
         <EditText
-            android:id="@+id/signup_reenter_password_edittext"
+            android:id="@+id/et_signup_reenter_password"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Re-enter password"
-            android:textColorHint="@color/colorGrey"
-            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/color_grey"
+            android:textColor="@color/color_black"
             android:padding="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_edittext"
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/signup_btn"
+            android:id="@+id/btn_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -71,7 +71,7 @@
             android:backgroundTint="@color/main_color" />
 
         <TextView
-            android:id="@+id/login_textview"
+            android:id="@+id/tv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"

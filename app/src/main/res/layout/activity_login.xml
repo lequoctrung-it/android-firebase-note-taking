@@ -28,30 +28,30 @@
             android:layout_marginBottom="30sp"/>
 
         <EditText
-            android:id="@+id/login_emailPhone_edittext"
+            android:id="@+id/et_login_email_phone"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Email/Phone Number"
-            android:textColorHint="@color/colorGrey"
-            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/color_grey"
+            android:textColor="@color/color_black"
             android:padding="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_edittext"/>
 
         <EditText
-            android:id="@+id/login_password_edittext"
+            android:id="@+id/et_login_password"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:hint="Password"
-            android:textColorHint="@color/colorGrey"
-            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/color_grey"
+            android:textColor="@color/color_black"
             android:padding="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded_edittext"
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
@@ -64,7 +64,7 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:id="@+id/signup_textview"
+                android:id="@+id/tv_signup"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Sign up"
@@ -75,7 +75,7 @@
                 android:gravity="center" />
 
             <TextView
-                android:id="@+id/forgot_password_textview"
+                android:id="@+id/tv_forgot_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Forgot password?"

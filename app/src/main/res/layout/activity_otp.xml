@@ -23,18 +23,18 @@
         android:layout_marginBottom="30sp"/>
 
     <EditText
-        android:id="@+id/otp_edittext"
+        android:id="@+id/et_otp"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:hint="Enter OTP here"
-        android:textColorHint="@color/colorGrey"
-        android:textColor="@color/colorBlack"
+        android:textColorHint="@color/color_grey"
+        android:textColor="@color/color_black"
         android:padding="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/rounded_edittext"/>
 
     <Button
-        android:id="@+id/verify_otp_btn"
+        android:id="@+id/btn_verify_otp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Verify"
@@ -47,7 +47,7 @@
         android:layout_marginTop="20dp">
 
         <TextView
-            android:id="@+id/resend_otp_textview"
+            android:id="@+id/tv_resend_otp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Resend OTP"
@@ -58,7 +58,7 @@
             android:gravity="center" />
 
         <TextView
-            android:id="@+id/skip_textview"
+            android:id="@+id/tv_skip"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Skip"

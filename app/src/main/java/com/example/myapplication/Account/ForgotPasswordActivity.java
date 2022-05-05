@@ -47,24 +47,24 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        binding.resetpasswordBtn.setOnClickListener(v -> {
+        binding.btnResetPassword.setOnClickListener(v -> {
             resetPassword();
         });
     }
 
     private void resetPassword() {
-        String email_phoneNumber = binding.resetpasswordEdittext.getText().toString().trim();
+        String email_phoneNumber = binding.etResetPassword.getText().toString().trim();
 
         if (email_phoneNumber.isEmpty()) {
-            binding.resetpasswordEdittext.setError("Please enter your email or phone number");
-            binding.resetpasswordEdittext.requestFocus();
+            binding.etResetPassword.setError("Please enter your email or phone number");
+            binding.etResetPassword.requestFocus();
             return;
         }
 
         if (!email_phoneNumber.matches(PHONE_REGEX)) {
             if (!Patterns.EMAIL_ADDRESS.matcher(email_phoneNumber).matches()) {
-                binding.resetpasswordEdittext.setError("Please provide valid email or phone number(start with +84)");
-                binding.resetpasswordEdittext.requestFocus();
+                binding.etResetPassword.setError("Please provide valid email or phone number(start with +84)");
+                binding.etResetPassword.requestFocus();
                 return;
             }
         }
@@ -85,10 +85,10 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     if (task.getResult().exists()) {
                         //User exist
-                        verifyPhoneNumber(binding.resetpasswordEdittext.getText().toString().trim());
+                        verifyPhoneNumber(binding.etResetPassword.getText().toString().trim());
                     }else {
-                        binding.resetpasswordEdittext.setError("No such user exist!");
-                        binding.resetpasswordEdittext.requestFocus();
+                        binding.etResetPassword.setError("No such user exist!");
+                        binding.etResetPassword.requestFocus();
                     }
                 }else {
                     Toast.makeText(ForgotPasswordActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
@@ -116,8 +116,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             }
                         });
                     }else {
-                        binding.resetpasswordEdittext.setError("No such user exist!");
-                        binding.resetpasswordEdittext.requestFocus();
+                        binding.etResetPassword.setError("No such user exist!");
+                        binding.etResetPassword.requestFocus();
                     }
                 }else {
                     Toast.makeText(ForgotPasswordActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
