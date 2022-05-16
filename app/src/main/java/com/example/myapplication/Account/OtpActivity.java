@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.example.myapplication.Note.MainActivity;
 import com.example.myapplication.databinding.ActivityOtpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
@@ -22,7 +24,11 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class OtpActivity extends AppCompatActivity {
@@ -104,7 +110,6 @@ public class OtpActivity extends AppCompatActivity {
                             // Update UI
                             String fakeEmail = user.getPhoneNumber() + "@fakemail.com";
                             signUpWithEmailAndPassword(fakeEmail, password);
-//                            directToMainActivity(user.getPhoneNumber());
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -123,24 +128,48 @@ public class OtpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(encodeUserEmail(email))
-                                    .setValue(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        directToMainActivity(email);
-                                        Toast.makeText(OtpActivity.this, "User has been registered successfully!", Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(OtpActivity.this, "Failed to register inner! Try again!", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("email", email);
+
+                            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .set(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+//                                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                                            // Verify mail if it is not fake mail
+                                            if (!email.contains("@fakemail.com")) {
+                                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                                user.sendEmailVerification();
+                                            }
+
+                                            loginWithEmailAndPassword(email, password);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error adding document", e);
+                                        }
+                                    });
                         }else {
                             Toast.makeText(OtpActivity.this, "Failed to register outter! Try again!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    private void loginWithEmailAndPassword(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    directToMainActivity(email);
+                }else {
+                    Toast.makeText(OtpActivity.this, "Failed to login! Please check your credentials", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void directToMainActivity(String phoneNumber) {

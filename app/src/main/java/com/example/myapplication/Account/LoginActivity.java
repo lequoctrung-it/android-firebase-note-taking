@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void validateForm() {
         String email_phoneNumber = binding.etLoginEmailPhone.getText().toString().trim();
-        String password = binding.etLoginEmailPhone.getText().toString().trim();
+        String password = binding.etLoginPassword.getText().toString().trim();
 
         if (email_phoneNumber.isEmpty()) {
             binding.etLoginEmailPhone.setError("Please enter your email or phone number");
@@ -93,6 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     directToMainActivity(email);
                 }else {
+//                    Log.e("ERROR", String.valueOf(task.getException()));
                     Toast.makeText(LoginActivity.this, "Failed to login! Please check your credentials", Toast.LENGTH_SHORT).show();
                 }
             }

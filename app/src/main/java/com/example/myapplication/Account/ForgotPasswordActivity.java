@@ -24,6 +24,10 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.concurrent.TimeUnit;
 
@@ -78,12 +82,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void forgotPasswordUsingPhoneNumber(String phoneNumber) {
         phoneNumber = phoneNumber + "@fakemail.com";
-        DatabaseReference reference =  FirebaseDatabase.getInstance().getReference("Users");
-        reference.child(encodeUserEmail(phoneNumber)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        CollectionReference reference =  FirebaseFirestore.getInstance().collection("users");
+        reference.whereEqualTo("email", phoneNumber).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    if (task.getResult().exists()) {
+                    if (!task.getResult().isEmpty()) {
                         //User exist
                         verifyPhoneNumber(binding.etResetPassword.getText().toString().trim());
                     }else {
@@ -98,18 +102,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     }
 
     private void forgotPasswordUsingEmail(String email) {
-        DatabaseReference reference =  FirebaseDatabase.getInstance().getReference("Users");
-        reference.child(encodeUserEmail(email)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        CollectionReference reference =  FirebaseFirestore.getInstance().collection("users");
+        reference.whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    if (task.getResult().exists()) {
+                    if (!task.getResult().isEmpty()) {
+                        Log.d("TEST DATA QUERY", String.valueOf(task.getResult().getDocuments()));
                         //User exist
                         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Toast.makeText(ForgotPasswordActivity.this, "Check your email to reset password!", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                 }else {
                                     Toast.makeText(ForgotPasswordActivity.this, "Try again! Something went wrong!", Toast.LENGTH_SHORT).show();
                                 }
@@ -136,7 +142,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                             @Override
                             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                                 //problem here
-                                signInWithPhoneAuthCredential(phoneAuthCredential);
+//                                signInWithPhoneAuthCredential(phoneAuthCredential);
                             }
 
                             @Override

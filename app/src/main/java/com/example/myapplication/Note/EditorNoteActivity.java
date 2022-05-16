@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,13 +34,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.example.myapplication.Database.NotesDatabase;
 import com.example.myapplication.Entities.Note;
 import com.example.myapplication.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -62,6 +68,9 @@ public class EditorNoteActivity extends AppCompatActivity {
     private String selectedNoteColor;
     private String selectedImagePath;
     private Note currentNote;
+
+    // Declare and initialize a Cloud Firestore instance
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,21 +191,55 @@ public class EditorNoteActivity extends AppCompatActivity {
         note.setSubtitle(etNoteSubtitle.getText().toString());
         note.setNoteText(etNoteContent.getText().toString());
         note.setDateTime(tvDateTime.getText().toString());
+        note.setTimestamp(new Timestamp(System.currentTimeMillis()).getTime());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
 
         // Update note by set the ID to override note
         if (currentNote != null) {
-            note.setId(currentNote.getId());
+            note.setNoteId(currentNote.getNoteId());
         }
 
-        // Room doesn't allow database operation on Main thread so we use AsyncTask
         @SuppressLint("StaticFieldLeak")
         class SaveNoteTask extends AsyncTask<Void, Void, Void> {
 
             @Override
             protected Void doInBackground(Void... voids) {
-                NotesDatabase.getDatabase(getApplicationContext()).noteDAO().insertNote(note);
+                if (currentNote != null) {
+                    // Case: update note
+                    DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document(note.getNoteId());
+                    ref
+                            .set(note)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("Firestore", "Document update successfully");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Firestore", "Document update failed: " + e);
+                                }
+                            });
+                } else {
+                    // Case: add note
+                    DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document();
+                    ref
+                            .set(note)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    Log.d("Firestore", "Document update successfully");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w("Firestore", "Document update failed: " + e);
+                                }
+                            });
+                }
                 return null;
             }
 
@@ -338,7 +381,21 @@ public class EditorNoteActivity extends AppCompatActivity {
 
                     @Override
                     protected Void doInBackground(Void... voids) {
-                        NotesDatabase.getDatabase(getApplicationContext()).noteDAO().deleteNote(currentNote);
+                        // Delete note on firestore
+                        db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document(currentNote.getNoteId())
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d("TAG", "DocumentSnapshot successfully deleted!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w("TAG", "Error deleting document", e);
+                                    }
+                                });
                         return null;
                     }
 

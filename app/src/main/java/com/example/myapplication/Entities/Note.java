@@ -1,44 +1,46 @@
 package com.example.myapplication.Entities;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity(tableName = "notes")
 public class Note implements Serializable {
+    public Note() {
+    }
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    public Note(String title, String dateTime, String subtitle, String noteText, String imagePath, String color, String musicPath) {
+        this.title = title;
+        this.dateTime = dateTime;
+        this.subtitle = subtitle;
+        this.noteText = noteText;
+        this.imagePath = imagePath;
+        this.color = color;
+        this.musicPath = musicPath;
+    }
 
-    @ColumnInfo(name = "title")
+    private String id;
+
     private String title;
 
-    @ColumnInfo(name = "date_time")
     private String dateTime;
 
-    @ColumnInfo(name = "subtitle")
+    private long timestamp;
+
     private String subtitle;
 
-    @ColumnInfo(name = "noteText")
     private String noteText;
 
-    @ColumnInfo(name = "image_path")
     private String imagePath;
 
-    @ColumnInfo(name = "color")
     private String color;
 
-    @ColumnInfo(name = "music_path")
     private String musicPath;
 
-    public int getId() {
+    public String getNoteId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setNoteId(String id) {
         this.id = id;
     }
 
@@ -96,6 +98,14 @@ public class Note implements Serializable {
 
     public void setMusicPath(String musicPath) {
         this.musicPath = musicPath;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     @NonNull
