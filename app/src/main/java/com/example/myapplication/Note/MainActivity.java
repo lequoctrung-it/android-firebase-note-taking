@@ -30,6 +30,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+// 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 token github
+
 public class MainActivity extends AppCompatActivity implements NotesListener {
     // Declare and initialize constant variables
     public static final int REQUEST_CODE_ADD_NOTE = 1;
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         ivChangeLayout = findViewById(R.id.iv_change_layout);
         etSearch = findViewById(R.id.et_search);
         rcNotes = findViewById(R.id.rc_notes);
-        notesAdapter = new NotesAdapter(noteList, this);
+        notesAdapter = new NotesAdapter(noteList, this, this);
         ivLogout = findViewById(R.id.iv_logout);
     }
 

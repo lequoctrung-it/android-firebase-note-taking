@@ -9,8 +9,10 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,6 +23,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.Entities.Note;
 import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,12 +47,18 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.InputStream;
-import java.net.URLConnection;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class EditorNoteActivity extends AppCompatActivity {
@@ -68,9 +79,12 @@ public class EditorNoteActivity extends AppCompatActivity {
     private String selectedNoteColor;
     private String selectedImagePath;
     private Note currentNote;
+    private Dialog dialogLoading;
+
 
     // Declare and initialize a Cloud Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +114,6 @@ public class EditorNoteActivity extends AppCompatActivity {
         vvNote = findViewById(R.id.videoView);
         ivBack = findViewById(R.id.iv_back);
         ivSave = findViewById(R.id.iv_save);
-
 
         tvDateTime.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault()).format(new Date()));
         selectedNoteColor = "#333333";
@@ -162,7 +175,11 @@ public class EditorNoteActivity extends AppCompatActivity {
                 findViewById(R.id.iv_remove_video).setVisibility(View.VISIBLE);
             }else {
                 // Case: image
-                ivNote.setImageBitmap(BitmapFactory.decodeFile(currentNote.getImagePath()));
+//                ivNote.setImageBitmap(BitmapFactory.decodeFile(currentNote.getImagePath()));
+
+                Glide.with(getApplicationContext())
+                        .load(currentNote.getImagePath())
+                        .into(ivNote);
 
                 ivNote.setVisibility(View.VISIBLE);
                 vvNote.setVisibility(View.GONE);
@@ -200,58 +217,118 @@ public class EditorNoteActivity extends AppCompatActivity {
             note.setNoteId(currentNote.getNoteId());
         }
 
-        @SuppressLint("StaticFieldLeak")
-        class SaveNoteTask extends AsyncTask<Void, Void, Void> {
+        // Check update or add
+        if (currentNote != null) {
+            // Case: update note
+            // Upload media to storage
+            if (!note.getImagePath().isEmpty()) {
+                Uri file = Uri.fromFile(new File(note.getImagePath()));
+                StorageReference mediaRef = storageRef.child("media/" + file.getLastPathSegment());
+                UploadTask uploadTask = mediaRef.putFile(file);
 
-            @Override
-            protected Void doInBackground(Void... voids) {
-                if (currentNote != null) {
-                    // Case: update note
-                    DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document(note.getNoteId());
-                    ref
-                            .set(note)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("Firestore", "Document update successfully");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("Firestore", "Document update failed: " + e);
-                                }
-                            });
-                } else {
-                    // Case: add note
-                    DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document();
-                    ref
-                            .set(note)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void unused) {
-                                    Log.d("Firestore", "Document update successfully");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w("Firestore", "Document update failed: " + e);
-                                }
-                            });
-                }
-                return null;
+                uploadTask
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Dismiss loading dialog
+                                dialogLoading.dismiss();
+
+                                // Store public image url to note
+                                note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + file.getLastPathSegment().replace(" ", "%20"));
+                                updateNoteToFirestore(note);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("Upload media fail", String.valueOf(e));
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                // Loading progress bar goes here
+                                showLoadingDialog();
+                            }
+                        });
+            } else {
+                updateNoteToFirestore(note);
             }
+        } else {
+            // Case: add note
+            // Upload media to storage
+            if (!note.getImagePath().isEmpty()) {
+                Uri file = Uri.fromFile(new File(note.getImagePath()));
+                StorageReference mediaRef = storageRef.child("media/" + file.getLastPathSegment());
+                UploadTask uploadTask = mediaRef.putFile(file);
 
-            @Override
-            protected void onPostExecute(Void unused) {
-                super.onPostExecute(unused);
-                setResult(RESULT_OK, new Intent());
-                finish();
+                uploadTask
+                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // Dismiss loading dialog
+                                dialogLoading.dismiss();
+
+                                // Store public image url to note
+                                note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + file.getLastPathSegment().replace(" ", "%20"));
+                                addNoteToFirestore(note);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.d("Upload media fail", String.valueOf(e));
+                            }
+                        })
+                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                // Loading progress bar goes here
+                                showLoadingDialog();
+                            }
+                        });
+            } else {
+                addNoteToFirestore(note);
             }
         }
+    }
 
-        new SaveNoteTask().execute();
+    private void updateNoteToFirestore(Note note) {
+        DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document(note.getNoteId());
+        ref
+                .set(note)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "Document update successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Document update failed: " + e);
+                    }
+                });
+    }
+
+    private void addNoteToFirestore(Note note) {
+        DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document();
+        ref
+                .set(note)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        setResult(RESULT_OK, new Intent());
+                        finish();
+                        Log.d("Firestore", "Document add successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Document add failed: " + e);
+                    }
+                });
     }
 
     private void initializeModal() {
@@ -421,6 +498,16 @@ public class EditorNoteActivity extends AppCompatActivity {
         dialogDeleteNote.show();
     }
 
+    private void showLoadingDialog() {
+        if (dialogLoading == null) {
+            dialogLoading = new Dialog(EditorNoteActivity.this);
+            dialogLoading.setContentView(R.layout.layout_loading_dialog);
+            dialogLoading.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialogLoading.create();
+            dialogLoading.show();
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -494,9 +581,20 @@ public class EditorNoteActivity extends AppCompatActivity {
         return filePath;
     }
 
-    public static boolean isVideoFile(String path) {
-        String mimeType = URLConnection.guessContentTypeFromName(path);
-        return mimeType != null && mimeType.startsWith("video");
+    public static boolean isVideoFile(String url) {
+        String ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+        switch (ext) {
+            case "mp4":
+            case "mkv":
+            case "mov":
+            case "mpg":
+            case "webm":
+            case "avi":
+            case "m4v":
+                return true;
+            default:
+                return false;
+        }
     }
 
     private void setSubtitleIndicatorColor() {

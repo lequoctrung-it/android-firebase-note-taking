@@ -1,5 +1,6 @@
 package com.example.myapplication.Adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.myapplication.Entities.Note;
 import com.example.myapplication.Listeners.NotesListener;
 import com.example.myapplication.R;
@@ -34,11 +36,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private NotesListener notesListener;
     private Timer timer;
     private List<Note> notesSource;
+    private Context context;
 
-    public NotesAdapter(List<Note> notes, NotesListener notesListener) {
+    public NotesAdapter(List<Note> notes, NotesListener notesListener, Context context) {
         this.notes = notes;
         this.notesListener = notesListener;
         notesSource = notes;
+        this.context = context;
     }
 
     @NonNull
@@ -49,7 +53,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        holder.setNote(notes.get(position));
+        holder.setNote(notes.get(position), context);
         holder.llNote.setOnClickListener(v -> {
             notesListener.onNoteClicked(notes.get(position), position);
         });
@@ -79,7 +83,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             rivNote = itemView.findViewById(R.id.riv_note);
         }
 
-        void setNote(Note note) {
+        void setNote(Note note, Context context) {
             // Display note title
             tvTitle.setText(note.getTitle());
 
@@ -105,10 +109,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             if (note.getImagePath() != null) {
                 if (isVideoFile(note.getImagePath())) {
                     // Create an thumbnail for video
-                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(note.getImagePath(), MediaStore.Video.Thumbnails.MINI_KIND);
-                    rivNote.setImageBitmap(bMap);
+//                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(note.getImagePath(), MediaStore.Video.Thumbnails.MINI_KIND);
+//                    rivNote.setImageBitmap(bMap);
                 }else {
-                    rivNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
+//                    rivNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
+                    Glide.with(context)
+                            .load(note.getImagePath())
+                            .into(rivNote);
                 }
                 rivNote.setVisibility(View.VISIBLE);
             }else {
@@ -117,9 +124,20 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
     }
 
-    public static boolean isVideoFile(String path) {
-        String mimeType = URLConnection.guessContentTypeFromName(path);
-        return mimeType != null && mimeType.startsWith("video");
+    public static boolean isVideoFile(String url) {
+        String ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+        switch (ext) {
+            case "mp4":
+            case "mkv":
+            case "mov":
+            case "mpg":
+            case "webm":
+            case "avi":
+            case "m4v":
+                return true;
+            default:
+                return false;
+        }
     }
 
     public void searchNotes(final String searchKeyword) {
