@@ -12,7 +12,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,8 +22,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,15 +53,15 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class EditorNoteActivity extends AppCompatActivity {
     // Declare and initialize constant variables
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     public static final int REQUEST_CODE_SELECT_IMAGE = 2;
+    public static final int REQUEST_CODE_UPDATE_NOTE = 3;
+    public static final int REQUEST_CODE_ADD_NOTE = 4;
 
     // Declare variables for views
     private EditText etNoteTitle, etNoteSubtitle, etNoteContent;
@@ -175,8 +172,6 @@ public class EditorNoteActivity extends AppCompatActivity {
                 findViewById(R.id.iv_remove_video).setVisibility(View.VISIBLE);
             }else {
                 // Case: image
-//                ivNote.setImageBitmap(BitmapFactory.decodeFile(currentNote.getImagePath()));
-
                 Glide.with(getApplicationContext())
                         .load(currentNote.getImagePath())
                         .into(ivNote);
@@ -222,35 +217,7 @@ public class EditorNoteActivity extends AppCompatActivity {
             // Case: update note
             // Upload media to storage
             if (!note.getImagePath().isEmpty()) {
-                Uri file = Uri.fromFile(new File(note.getImagePath()));
-                StorageReference mediaRef = storageRef.child("media/" + file.getLastPathSegment());
-                UploadTask uploadTask = mediaRef.putFile(file);
-
-                uploadTask
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Dismiss loading dialog
-                                dialogLoading.dismiss();
-
-                                // Store public image url to note
-                                note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + file.getLastPathSegment().replace(" ", "%20"));
-                                updateNoteToFirestore(note);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("Upload media fail", String.valueOf(e));
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                // Loading progress bar goes here
-                                showLoadingDialog();
-                            }
-                        });
+                uploadMediaToStorage(REQUEST_CODE_UPDATE_NOTE, note);
             } else {
                 updateNoteToFirestore(note);
             }
@@ -258,39 +225,47 @@ public class EditorNoteActivity extends AppCompatActivity {
             // Case: add note
             // Upload media to storage
             if (!note.getImagePath().isEmpty()) {
-                Uri file = Uri.fromFile(new File(note.getImagePath()));
-                StorageReference mediaRef = storageRef.child("media/" + file.getLastPathSegment());
-                UploadTask uploadTask = mediaRef.putFile(file);
-
-                uploadTask
-                        .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                // Dismiss loading dialog
-                                dialogLoading.dismiss();
-
-                                // Store public image url to note
-                                note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + file.getLastPathSegment().replace(" ", "%20"));
-                                addNoteToFirestore(note);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("Upload media fail", String.valueOf(e));
-                            }
-                        })
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                // Loading progress bar goes here
-                                showLoadingDialog();
-                            }
-                        });
+                uploadMediaToStorage(REQUEST_CODE_ADD_NOTE, note);
             } else {
                 addNoteToFirestore(note);
             }
         }
+    }
+
+    private void uploadMediaToStorage(int requestCode, Note note) {
+        Uri file = Uri.fromFile(new File(note.getImagePath()));
+        StorageReference mediaRef = storageRef.child("media/" + file.getLastPathSegment());
+        UploadTask uploadTask = mediaRef.putFile(file);
+
+        uploadTask
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // Dismiss loading dialog
+                        dialogLoading.dismiss();
+
+                        // Store public image url to note
+                        note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + file.getLastPathSegment().replace(" ", "%20"));
+                        if (requestCode == REQUEST_CODE_ADD_NOTE) {
+                            addNoteToFirestore(note);
+                        } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
+                            updateNoteToFirestore(note);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Upload media fail", String.valueOf(e));
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                        // Loading progress bar goes here
+                        showLoadingDialog();
+                    }
+                });
     }
 
     private void updateNoteToFirestore(Note note) {
@@ -300,6 +275,8 @@ public class EditorNoteActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
+                        setResult(RESULT_OK, new Intent());
+                        finish();
                         Log.d("Firestore", "Document update successfully");
                     }
                 })
@@ -313,6 +290,7 @@ public class EditorNoteActivity extends AppCompatActivity {
 
     private void addNoteToFirestore(Note note) {
         DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document();
+        note.setNoteId(ref.getId());
         ref
                 .set(note)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -464,6 +442,8 @@ public class EditorNoteActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
+                                        currentNote.setDeleteTimestamp(new Timestamp(System.currentTimeMillis()).getTime());
+                                        insertDeleteNoteToRecycleBinFirebase(currentNote);
                                         Log.d("TAG", "DocumentSnapshot successfully deleted!");
                                     }
                                 })
@@ -479,6 +459,7 @@ public class EditorNoteActivity extends AppCompatActivity {
                     @Override
                     protected void onPostExecute(Void unused) {
                         super.onPostExecute(unused);
+                        dialogDeleteNote.dismiss();
                         setResult(
                                 RESULT_OK,
                                 new Intent()
@@ -496,6 +477,24 @@ public class EditorNoteActivity extends AppCompatActivity {
             });
         }
         dialogDeleteNote.show();
+    }
+
+    private void insertDeleteNoteToRecycleBinFirebase(Note note) {
+        DocumentReference ref = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("recycle bin").document(note.getNoteId());
+        ref
+                .set(note)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("Firestore", "Document add to recycle bin successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("Firestore", "Document add failed: " + e);
+                    }
+                });
     }
 
     private void showLoadingDialog() {

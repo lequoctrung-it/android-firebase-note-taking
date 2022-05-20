@@ -26,6 +26,8 @@ public class Note implements Serializable {
 
     private long timestamp;
 
+    private long deleteTimestamp;
+
     private String subtitle;
 
     private String noteText;
@@ -106,6 +108,14 @@ public class Note implements Serializable {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public long getDeleteTimestamp() {
+        return deleteTimestamp;
+    }
+
+    public void setDeleteTimestamp(long deleteTimestamp) {
+        this.deleteTimestamp = deleteTimestamp;
     }
 
     @NonNull

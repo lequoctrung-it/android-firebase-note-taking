@@ -112,7 +112,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 //                    Bitmap bMap = ThumbnailUtils.createVideoThumbnail(note.getImagePath(), MediaStore.Video.Thumbnails.MINI_KIND);
 //                    rivNote.setImageBitmap(bMap);
                 }else {
-//                    rivNote.setImageBitmap(BitmapFactory.decodeFile(note.getImagePath()));
                     Glide.with(context)
                             .load(note.getImagePath())
                             .into(rivNote);

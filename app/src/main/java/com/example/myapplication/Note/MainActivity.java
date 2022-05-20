@@ -30,17 +30,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-// 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 token github
-
 public class MainActivity extends AppCompatActivity implements NotesListener {
     // Declare and initialize constant variables
     public static final int REQUEST_CODE_ADD_NOTE = 1;
     public static final int REQUEST_CODE_UPDATE_NOTE = 2;
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
+    private static final int REQUEST_CODE_UNDO_NOTE = 4;
 
     // Declare variables for views
     private RecyclerView rcNotes;
-    private ImageView ivAddNewNote, ivChangeLayout, ivLogout;
+    private ImageView ivAddNewNote, ivChangeLayout, ivLogout, ivRecycleBin;
     private EditText etSearch;
 
     // Others
@@ -110,6 +109,14 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
         });
+
+        // Recycle bin button
+        ivRecycleBin.setOnClickListener(v -> {
+            startActivityForResult(
+                    new Intent(getApplicationContext(), RecycleBinActivity.class),
+                    REQUEST_CODE_UNDO_NOTE
+            );
+        });
     }
 
     private void initializeViews() {
@@ -120,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         rcNotes = findViewById(R.id.rc_notes);
         notesAdapter = new NotesAdapter(noteList, this, this);
         ivLogout = findViewById(R.id.iv_logout);
+        ivRecycleBin = findViewById(R.id.iv_recycle_bin);
     }
 
     @Override
@@ -143,6 +151,10 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             if (data != null) {
                 getNotes(REQUEST_CODE_UPDATE_NOTE, data.getBooleanExtra("isNoteDeleted", false));
             }
+        } else if (requestCode == REQUEST_CODE_UNDO_NOTE && resultCode == RESULT_OK) {
+            if (data.getBooleanExtra("isNoteUndo", false)) {
+                getNotes(REQUEST_CODE_UNDO_NOTE, false);
+            }
         }
     }
 
@@ -157,7 +169,6 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Note note = document.toObject(Note.class);
-                        note.setNoteId(document.getId());
                         notes.add(note);
                     }
 
@@ -180,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                             noteList.add(noteClickedPosition, notes.get(0));
                             notesAdapter.notifyItemChanged(noteClickedPosition);
                         }
+                    } else if (requestCode == REQUEST_CODE_UNDO_NOTE) {
+                        noteList.clear();
+                        noteList.addAll(notes);
+                        notesAdapter.notifyDataSetChanged();
                     }
 
                 } else {

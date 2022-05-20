@@ -5,27 +5,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Note.MainActivity"
+    tools:context=".Note.RecycleBinActivity"
     android:background="@color/color_primary"
     >
 
+    <ImageView
+        android:id="@+id/iv_rb_back"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginStart="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/ic_back"
+        app:tint="@color/color_icons"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:id="@+id/tv_my_notes"
+        android:id="@+id/tv_recycle_bin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="27dp"
         android:fontFamily="@font/poppins_bold"
         android:includeFontPadding="false"
-        android:text="@string/my_notes"
+        android:text="@string/recycle_bin"
         android:textColor="@color/color_white"
         android:textSize="@dimen/_20ssp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/ll_search"
+        android:id="@+id/ll_rb_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
@@ -36,7 +47,7 @@
         android:orientation="horizontal"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@id/tv_my_notes"
+        app:layout_constraintTop_toBottomOf="@id/tv_recycle_bin"
         >
 
         <ImageView
@@ -48,7 +59,7 @@
             />
 
         <EditText
-            android:id="@+id/et_search"
+            android:id="@+id/et_rb_search"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_35sdp"
             android:layout_marginStart="@dimen/_12sdp"
@@ -66,7 +77,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rc_notes"
+        android:id="@+id/rc_rb_notes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/_2sdp"
@@ -75,13 +86,13 @@
         android:paddingStart="0dp"
         android:paddingEnd="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_12sdp"
-        app:layout_constraintBottom_toTopOf="@id/ll_quick_actions"
-        app:layout_constraintTop_toBottomOf="@id/ll_search"
+        app:layout_constraintBottom_toTopOf="@id/ll_rb_quick_actions"
+        app:layout_constraintTop_toBottomOf="@id/ll_rb_search"
         >
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
-        android:id="@+id/ll_quick_actions"
+        android:id="@+id/ll_rb_quick_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_quick_actions_background"
@@ -92,7 +103,7 @@
         >
 
         <ImageView
-            android:id="@+id/iv_change_layout"
+            android:id="@+id/iv_rb_change_layout"
             android:layout_width="@dimen/_23sdp"
             android:layout_height="@dimen/_23sdp"
             android:contentDescription="@string/app_name"
@@ -101,17 +112,7 @@
             />
 
         <ImageView
-            android:id="@+id/iv_recycle_bin"
-            android:layout_width="@dimen/_23sdp"
-            android:layout_height="@dimen/_23sdp"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_delete"
-            app:tint="@color/color_icons"
-            />
-
-        <ImageView
-            android:id="@+id/iv_logout"
+            android:id="@+id/iv_rb_logout"
             android:layout_width="@dimen/_23sdp"
             android:layout_height="@dimen/_23sdp"
             android:layout_marginStart="@dimen/_8sdp"
@@ -120,20 +121,5 @@
             app:tint="@color/color_icons"
             />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/iv_add_new_note"
-        android:layout_width="@dimen/_40sdp"
-        android:layout_height="@dimen/_40sdp"
-        android:layout_marginEnd="@dimen/_30sdp"
-        android:background="@drawable/background_add_button"
-        android:contentDescription="@string/app_name"
-        android:padding="@dimen/_5sdp"
-        android:src="@drawable/ic_add"
-        app:layout_constraintBottom_toTopOf="@id/ll_quick_actions"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ll_quick_actions"
-        app:tint="@color/color_primary"
-        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
