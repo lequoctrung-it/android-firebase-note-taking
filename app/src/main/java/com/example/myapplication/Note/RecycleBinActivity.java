@@ -33,6 +33,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -56,9 +58,11 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
     private NotesAdapter notesAdapter;
     private List<Note> noteList;
     private boolean flag = true;
+    private String storageRootUrl = "https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/media/";
 
     // Declare and initialize a Cloud Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +180,11 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
                     public void onSuccess(Void aVoid) {
                         if (requestCode == REQUEST_CODE_PERMANENTLY_DELETE_NOTE) {
                             // Case: permanently delete note
+                            if (!note.getImagePath().isEmpty()) {
+                                // Delete media in storage in case note contain media
+                                String fileName = note.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
+                                deleteMediaInStorage(fileName);
+                            }
                             backToPreviousScreen(false);
                         } else if (requestCode == REQUEST_CODE_UNDO_NOTE) {
                             // Case: undo note
@@ -188,8 +197,11 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
                             backToPreviousScreen(true);
                         } else if (requestCode == REQUEST_CODE_DELETE_OUT_OF_DATE_NOTE) {
                             // Case: delete out of date note
-
-                            // Do nothing
+                            if (!note.getImagePath().isEmpty()) {
+                                // Delete media in storage in case note contain media
+                                String fileName = note.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
+                                deleteMediaInStorage(fileName);
+                            }
                         }
                         Log.d("TAG", "DocumentSnapshot successfully undo!");
                     }
@@ -218,6 +230,21 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
                         Log.w("Firestore", "Document add failed: " + e);
                     }
                 });
+    }
+
+    private void deleteMediaInStorage(String fileName) {
+        StorageReference fileRef = storageRef.child("media/" + fileName);
+        fileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Storage Delete", "File delete successfully");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Storage Delete", "Delete fail: " + e);
+            }
+        });
     }
 
     public void getRecycleBinNotes(final int requestCode) {

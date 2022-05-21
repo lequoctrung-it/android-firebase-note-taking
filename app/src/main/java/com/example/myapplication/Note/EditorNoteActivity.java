@@ -77,7 +77,7 @@ public class EditorNoteActivity extends AppCompatActivity {
     private String selectedImagePath;
     private Note currentNote;
     private Dialog dialogLoading;
-
+    private String storageRootUrl = "https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/media/";
 
     // Declare and initialize a Cloud Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -215,11 +215,28 @@ public class EditorNoteActivity extends AppCompatActivity {
         // Check update or add
         if (currentNote != null) {
             // Case: update note
-            // Upload media to storage
-            if (!note.getImagePath().isEmpty()) {
-                uploadMediaToStorage(REQUEST_CODE_UPDATE_NOTE, note);
+            if (currentNote.getImagePath().isEmpty()) {
+                // Case: No image
+                if (note.getImagePath().isEmpty()) {
+                    // Case: No upload
+                    updateNoteToFirestore(note);
+                } else {
+                    // Case: Upload
+                    uploadMediaToStorage(REQUEST_CODE_UPDATE_NOTE, note);
+                }
             } else {
-                updateNoteToFirestore(note);
+                // Case: Have image
+                if (note.getImagePath().isEmpty()) {
+                    // Case: Delete current image
+                    String fileName = currentNote.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
+                    deleteMediaInStorage(fileName);
+                    updateNoteToFirestore(note);
+                } else {
+                    // Case: Replace image
+                    String fileName = currentNote.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
+                    deleteMediaInStorage(fileName);
+                    uploadMediaToStorage(REQUEST_CODE_UPDATE_NOTE, note);
+                }
             }
         } else {
             // Case: add note
@@ -230,6 +247,21 @@ public class EditorNoteActivity extends AppCompatActivity {
                 addNoteToFirestore(note);
             }
         }
+    }
+
+    private void deleteMediaInStorage(String fileName) {
+        StorageReference fileRef = storageRef.child("media/" + fileName);
+        fileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Storage Delete", "File delete successfully");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Storage Delete", "Delete fail: " + e);
+            }
+        });
     }
 
     private void uploadMediaToStorage(int requestCode, Note note) {
