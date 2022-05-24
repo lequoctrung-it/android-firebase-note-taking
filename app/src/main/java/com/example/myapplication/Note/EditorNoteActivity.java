@@ -12,13 +12,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -26,11 +22,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,7 +39,6 @@ import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -56,7 +49,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.timepicker.MaterialTimePicker;
-import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -69,7 +61,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -84,9 +75,8 @@ public class EditorNoteActivity extends AppCompatActivity {
     public static final int REQUEST_CODE_PICK_AUDIO = 5;
 
     // Declare variables for views
-    private EditText etNoteTitle, etNoteSubtitle, etNoteContent;
+    private EditText etNoteTitle, etNoteContent, etNotePassword;
     private TextView tvDateTime, tvAudioDuration, tvAudioTitle;
-    private View viewSubtitleIndicator;
     private ImageView ivNote, ivBack, ivSave, ivPlay;
     private VideoView vvNote;
     private SeekBar sbAudio;
@@ -98,7 +88,6 @@ public class EditorNoteActivity extends AppCompatActivity {
     private TextView DateField;
 
     // Others
-    private String selectedNoteColor;
     private String selectedImagePath;
     private String selectedAudioPath;
     private Note currentNote;
@@ -107,15 +96,6 @@ public class EditorNoteActivity extends AppCompatActivity {
     private String duration;
     private ScheduledExecutorService timer;
     MediaPlayer mediaPlayer;
-
-
-    //Noti
-    private AlarmManager alarmManager;
-    private MaterialTimePicker picker;
-    private Calendar calendar;
-
-    private PendingIntent pendingIntent;
-
 
     // Declare and initialize a Cloud Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -136,16 +116,13 @@ public class EditorNoteActivity extends AppCompatActivity {
         }
 
         initializeModal();
-        setSubtitleIndicatorColor();
         createNotificationChannel();
     }
 
     private void initializeViews() {
         etNoteTitle = findViewById(R.id.et_input_note_title);
-        etNoteSubtitle = findViewById(R.id.et_input_note_subtitle);
         etNoteContent = findViewById(R.id.et_note);
         tvDateTime = findViewById(R.id.tv_date_time);
-        viewSubtitleIndicator = findViewById(R.id.v_subtitle_indicator);
         ivNote = findViewById(R.id.riv_note);
         vvNote = findViewById(R.id.videoView);
         ivBack = findViewById(R.id.iv_back);
@@ -156,10 +133,11 @@ public class EditorNoteActivity extends AppCompatActivity {
         sbAudio = findViewById(R.id.sb_audio);
         llAudioContainer = findViewById(R.id.ll_audio_container);
         llAddTime = findViewById(R.id.ll_add_time);
-        DateField = findViewById(R.id.date_field);
+//        DateField = findViewById(R.id.date_field);
+        etNotePassword = findViewById(R.id.note_password);
+
 
         tvDateTime.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault()).format(new Date()));
-        selectedNoteColor = "#333333";
         selectedImagePath = "";
         selectedAudioPath = "";
     }
@@ -256,7 +234,6 @@ public class EditorNoteActivity extends AppCompatActivity {
 
     private void setViewForCurrentNote() {
         etNoteTitle.setText(currentNote.getTitle());
-        etNoteSubtitle.setText(currentNote.getSubtitle());
         etNoteContent.setText(currentNote.getNoteText());
         tvDateTime.setText(currentNote.getDateTime());
 
@@ -281,8 +258,6 @@ public class EditorNoteActivity extends AppCompatActivity {
                 findViewById(R.id.iv_remove_video).setVisibility(View.VISIBLE);
             }else {
                 // Case: image
-//                ivNote.setImageBitmap(BitmapFactory.decodeFile(currentNote.getImagePath()));
-
                 Glide.with(getApplicationContext())
                         .load(currentNote.getImagePath())
                         .into(ivNote);
@@ -300,6 +275,10 @@ public class EditorNoteActivity extends AppCompatActivity {
             findViewById(R.id.iv_remove_audio).setVisibility(View.VISIBLE);
             selectedAudioPath = currentNote.getMusicPath();
         }
+
+        if (currentNote.getNotePass() != null && !currentNote.getNotePass().trim().isEmpty()) {
+            etNotePassword.setText(currentNote.getNotePass());
+        }
     }
 
     private void saveNote() {
@@ -309,7 +288,7 @@ public class EditorNoteActivity extends AppCompatActivity {
             return;
         }
 
-        if (etNoteSubtitle.getText().toString().trim().isEmpty() && etNoteContent.getText().toString().trim().isEmpty()) {
+        if (etNoteContent.getText().toString().trim().isEmpty()) {
             Toast.makeText(this, "Note is required", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -317,13 +296,12 @@ public class EditorNoteActivity extends AppCompatActivity {
         // Create object note to store data
         final Note note = new Note();
         note.setTitle(etNoteTitle.getText().toString());
-        note.setSubtitle(etNoteSubtitle.getText().toString());
         note.setNoteText(etNoteContent.getText().toString());
         note.setDateTime(tvDateTime.getText().toString());
         note.setTimestamp(new Timestamp(System.currentTimeMillis()).getTime());
-        note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
         note.setMusicPath(selectedAudioPath);
+        note.setNotePass(etNotePassword.getText().toString().trim());
 
         // Update note by set the ID to override note
         if (currentNote != null) {
@@ -523,81 +501,6 @@ public class EditorNoteActivity extends AppCompatActivity {
             }
         });
 
-        final ImageView ivColor1 = llModal.findViewById(R.id.iv_color_1);
-        final ImageView ivColor2 = llModal.findViewById(R.id.iv_color_2);
-        final ImageView ivColor3 = llModal.findViewById(R.id.iv_color_3);
-        final ImageView ivColor4 = llModal.findViewById(R.id.iv_color_4);
-        final ImageView ivColor5 = llModal.findViewById(R.id.iv_color_5);
-
-        // Handle color picker
-        llModal.findViewById(R.id.v_color_1).setOnClickListener(v -> {
-            selectedNoteColor = "#333333";
-            ivColor1.setImageResource(R.drawable.ic_done);
-            ivColor2.setImageResource(0);
-            ivColor3.setImageResource(0);
-            ivColor4.setImageResource(0);
-            ivColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
-        });
-
-        llModal.findViewById(R.id.v_color_2).setOnClickListener(v -> {
-            selectedNoteColor = "#FDBE3B";
-            ivColor1.setImageResource(0);
-            ivColor2.setImageResource(R.drawable.ic_done);
-            ivColor3.setImageResource(0);
-            ivColor4.setImageResource(0);
-            ivColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
-        });
-
-        llModal.findViewById(R.id.v_color_3).setOnClickListener(v -> {
-            selectedNoteColor = "#FF4842";
-            ivColor1.setImageResource(0);
-            ivColor2.setImageResource(0);
-            ivColor3.setImageResource(R.drawable.ic_done);
-            ivColor4.setImageResource(0);
-            ivColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
-        });
-
-        llModal.findViewById(R.id.v_color_4).setOnClickListener(v -> {
-            selectedNoteColor = "#3A52Fc";
-            ivColor1.setImageResource(0);
-            ivColor2.setImageResource(0);
-            ivColor3.setImageResource(0);
-            ivColor4.setImageResource(R.drawable.ic_done);
-            ivColor5.setImageResource(0);
-            setSubtitleIndicatorColor();
-        });
-
-        llModal.findViewById(R.id.v_color_5).setOnClickListener(v -> {
-            selectedNoteColor = "#000000";
-            ivColor1.setImageResource(0);
-            ivColor2.setImageResource(0);
-            ivColor3.setImageResource(0);
-            ivColor4.setImageResource(0);
-            ivColor5.setImageResource(R.drawable.ic_done);
-            setSubtitleIndicatorColor();
-        });
-
-        // Set view for note color in case updating or view note
-        if (currentNote != null && currentNote.getColor() != null && !currentNote.getColor().trim().isEmpty()) {
-            switch (currentNote.getColor()) {
-                case "#FDBE3B":
-                    llModal.findViewById(R.id.v_color_2).performClick();
-                    break;
-                case "#FF4842":
-                    llModal.findViewById(R.id.v_color_3).performClick();
-                    break;
-                case "#3A52Fc":
-                    llModal.findViewById(R.id.v_color_4).performClick();
-                    break;
-                case "#000000":
-                    llModal.findViewById(R.id.v_color_5).performClick();
-                    break;
-            }
-        }
-
         // Add image on click
         llModal.findViewById(R.id.ll_add_image).setOnClickListener(v -> {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -614,16 +517,9 @@ public class EditorNoteActivity extends AppCompatActivity {
         });
         //Set alarm
         llAddTime.setOnClickListener(v -> {
-//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            showTimePicker();
-//            createNotificationChannel();
             DialogFragment newFragment = new TimePickerFragment();
             newFragment.show(getSupportFragmentManager(), "setAlarm");
         });
-
-
-
-
 
         // Handle delete button in case current note is available
         if (currentNote != null) {
@@ -676,8 +572,6 @@ public class EditorNoteActivity extends AppCompatActivity {
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
-
-
 
     private void showDeleteNoteDialog() {
         if (dialogDeleteNote == null) {
@@ -938,11 +832,6 @@ public class EditorNoteActivity extends AppCompatActivity {
             default:
                 return false;
         }
-    }
-
-    private void setSubtitleIndicatorColor() {
-        GradientDrawable gradientDrawable = (GradientDrawable) viewSubtitleIndicator.getBackground();
-        gradientDrawable.setColor(Color.parseColor(selectedNoteColor));
     }
 
     public void selectImage() {

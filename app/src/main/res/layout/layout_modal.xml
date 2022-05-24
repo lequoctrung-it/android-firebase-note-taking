@@ -18,127 +18,127 @@
         android:gravity="center"
         android:includeFontPadding="false"
         android:text="@string/modal_title"
-        android:textColor="@color/color_white"
+        android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_13ssp" />
 
-    <LinearLayout
-        android:id="@+id/ll_note_color"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_10sdp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/ll_note_color"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="@dimen/_10sdp"-->
+<!--        android:gravity="center_vertical"-->
+<!--        android:orientation="horizontal">-->
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+<!--        <FrameLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1">-->
 
-            <View
-                android:id="@+id/v_color_1"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:background="@drawable/background_note_color_1" />
+<!--            <View-->
+<!--                android:id="@+id/v_color_1"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:background="@drawable/background_note_color_1" />-->
 
-            <ImageView
-                android:id="@+id/iv_color_1"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/_10sdp"
-                android:src="@drawable/ic_done"
-                app:tint="@color/color_white" />
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_color_1"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                android:padding="@dimen/_10sdp"-->
+<!--                android:src="@drawable/ic_done"-->
+<!--                app:tint="@color/color_white" />-->
+<!--        </FrameLayout>-->
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+<!--        <FrameLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1">-->
 
-            <View
-                android:id="@+id/v_color_2"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:background="@drawable/background_note_color_2" />
+<!--            <View-->
+<!--                android:id="@+id/v_color_2"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:background="@drawable/background_note_color_2" />-->
 
-            <ImageView
-                android:id="@+id/iv_color_2"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/_10sdp"
-                app:tint="@color/color_white" />
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_color_2"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                android:padding="@dimen/_10sdp"-->
+<!--                app:tint="@color/color_white" />-->
+<!--        </FrameLayout>-->
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+<!--        <FrameLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1">-->
 
-            <View
-                android:id="@+id/v_color_3"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:background="@drawable/background_note_color_3" />
+<!--            <View-->
+<!--                android:id="@+id/v_color_3"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:background="@drawable/background_note_color_3" />-->
 
-            <ImageView
-                android:id="@+id/iv_color_3"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/_10sdp"
-                app:tint="@color/color_white" />
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_color_3"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                android:padding="@dimen/_10sdp"-->
+<!--                app:tint="@color/color_white" />-->
+<!--        </FrameLayout>-->
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+<!--        <FrameLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1">-->
 
-            <View
-                android:id="@+id/v_color_4"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:background="@drawable/background_note_color_4" />
+<!--            <View-->
+<!--                android:id="@+id/v_color_4"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:background="@drawable/background_note_color_4" />-->
 
-            <ImageView
-                android:id="@+id/iv_color_4"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/_10sdp"
-                app:tint="@color/color_white" />
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_color_4"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                android:padding="@dimen/_10sdp"-->
+<!--                app:tint="@color/color_white" />-->
+<!--        </FrameLayout>-->
 
-        <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+<!--        <FrameLayout-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1">-->
 
-            <View
-                android:id="@+id/v_color_5"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:background="@drawable/background_note_color_5" />
+<!--            <View-->
+<!--                android:id="@+id/v_color_5"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:background="@drawable/background_note_color_5" />-->
 
-            <ImageView
-                android:id="@+id/iv_color_5"
-                android:layout_width="@dimen/_35sdp"
-                android:layout_height="@dimen/_35sdp"
-                android:contentDescription="@string/app_name"
-                android:padding="@dimen/_10sdp"
-                app:tint="@color/color_white" />
-        </FrameLayout>
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_color_5"-->
+<!--                android:layout_width="@dimen/_35sdp"-->
+<!--                android:layout_height="@dimen/_35sdp"-->
+<!--                android:contentDescription="@string/app_name"-->
+<!--                android:padding="@dimen/_10sdp"-->
+<!--                app:tint="@color/color_white" />-->
+<!--        </FrameLayout>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_medium"
-            android:includeFontPadding="false"
-            android:text="@string/pick_color"
-            android:textColor="@color/color_white"
-            android:textSize="@dimen/_13ssp" />
-    </LinearLayout>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/poppins_medium"-->
+<!--            android:includeFontPadding="false"-->
+<!--            android:text="@string/pick_color"-->
+<!--            android:textColor="@color/color_white"-->
+<!--            android:textSize="@dimen/_13ssp" />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ll_add_image"
@@ -154,7 +154,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_image"
-            app:tint="@color/color_icons" />
+            app:tint="@color/color_search_icon" />
 
         <TextView
             android:layout_width="match_parent"
@@ -163,33 +163,7 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="@string/add_media"
-            android:textColor="@color/color_icons"
-            android:textSize="@dimen/_12ssp" />
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/ll_add_time"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_35sdp"
-        android:layout_margin="@dimen/_10sdp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:layout_width="@dimen/_22sdp"
-            android:layout_height="@dimen/_22sdp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_alarm"
-            app:tint="@color/color_icons" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
-            android:fontFamily="@font/poppins_medium"
-            android:includeFontPadding="false"
-            android:text="Set alarm"
-            android:textColor="@color/color_icons"
+            android:textColor="@color/color_search_icon"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 
@@ -208,7 +182,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_audio"
-            app:tint="@color/color_icons" />
+            app:tint="@color/color_search_icon" />
 
         <TextView
             android:layout_width="match_parent"
@@ -217,8 +191,68 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="@string/add_audio"
-            android:textColor="@color/color_icons"
+            android:textColor="@color/color_search_icon"
             android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_add_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_alarm"
+            app:tint="@color/color_search_icon" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:includeFontPadding="false"
+            android:text="Set alarm"
+            android:textColor="@color/color_search_icon"
+            android:textSize="@dimen/_12ssp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_add_note_password"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_35sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_lock"
+            app:tint="@color/color_search_icon" />
+
+        <EditText
+            android:id="@+id/note_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:fontFamily="@font/poppins_medium"
+            android:includeFontPadding="false"
+            android:inputType="textPassword"
+            android:hint="@string/enter_password"
+            android:textColorHint="@color/color_search_icon"
+            android:textColor="@color/color_search_icon"
+            android:textSize="@dimen/_12ssp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -237,7 +271,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_share"
-            app:tint="@color/color_icons" />
+            app:tint="@color/color_accent" />
 
         <TextView
             android:layout_width="match_parent"
@@ -246,7 +280,7 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="@string/share_to"
-            android:textColor="@color/color_icons"
+            android:textColor="@color/color_accent"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 

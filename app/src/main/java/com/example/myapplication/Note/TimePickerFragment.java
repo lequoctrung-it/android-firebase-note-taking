@@ -17,6 +17,7 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.myapplication.R;
@@ -40,7 +41,6 @@ public class TimePickerFragment extends DialogFragment
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-//        createNotificationChannel();
         final Calendar c = Calendar.getInstance();
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
@@ -58,31 +58,15 @@ public class TimePickerFragment extends DialogFragment
         pendingIntent = PendingIntent.getBroadcast(this.getContext(),0,intent,PendingIntent.FLAG_IMMUTABLE);
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
-
-        Log.e(TAG, "DC ROI:"+calendar);
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
         String time = hourOfDay + ":" + minute;
-//                DateField.setText(time);
+                DateField.setText(time);
                 calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 calendar.set(Calendar.MINUTE,minute);
                 calendar.set(Calendar.YEAR,Calendar.MONTH,Calendar.DAY_OF_MONTH);
                 setAlarm();
     }
-
-//    private void createNotificationChannel() {
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-//            CharSequence name = "setAlarmReminderChannel";
-//            String description = "Channel for Alarm Manager";
-//            int importance = NotificationManager.IMPORTANCE_HIGH;
-//            NotificationChannel channel = new NotificationChannel("setAlarm", name, importance);
-//            channel.setDescription(description);
-//
-//            NotificationManager notificationManager = this.getContext().getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//    }
-
 }

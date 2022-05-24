@@ -108,8 +108,7 @@
             android:layout_height="@dimen/_23sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_list"
-            app:tint="@color/color_icons"
-            />
+            app:tint="@color/color_accent" />
 
         <ImageView
             android:id="@+id/iv_rb_logout"
@@ -118,8 +117,7 @@
             android:layout_marginStart="@dimen/_8sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_logout"
-            app:tint="@color/color_icons"
-            />
+            app:tint="@color/color_accent" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

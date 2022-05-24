@@ -2,8 +2,6 @@ package com.example.myapplication.Note;
 
 import static android.content.ContentValues.TAG;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +10,6 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.navigation.ActivityNavigator;
 
 import com.example.myapplication.R;
 

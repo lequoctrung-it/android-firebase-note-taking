@@ -2,18 +2,23 @@ package com.example.myapplication.Note;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.myapplication.Account.LoginActivity;
 import com.example.myapplication.Adapters.NotesAdapter;
@@ -44,7 +49,9 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     // Declare variables for views
     private RecyclerView rcNotes;
     private ImageView ivAddNewNote, ivChangeLayout, ivLogout, ivRecycleBin;
-    private EditText etSearch;
+    private EditText etSearch, etNotePass;
+    private AlertDialog dialogNotePass;
+
 
     // Others
     private NotesAdapter notesAdapter;
@@ -121,6 +128,21 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                     REQUEST_CODE_UNDO_NOTE
             );
         });
+
+        rcNotes.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0 || dy < 0 && ivAddNewNote.isShown())
+                    ivAddNewNote.setVisibility(View.GONE);
+            };
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                    ivAddNewNote.setVisibility(View.VISIBLE);
+                super.onScrollStateChanged(recyclerView, newState);
+            };
+        });
     }
 
     private void initializeViews() {
@@ -137,12 +159,49 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     @Override
     public void onNoteClicked(Note note, int position) {
         noteClickedPosition = position;
-        startActivityForResult(
-                new Intent(getApplicationContext(), EditorNoteActivity.class)
-                        .putExtra("isViewOrUpdate", true)
-                        .putExtra("note", note),
-                REQUEST_CODE_UPDATE_NOTE
-        );
+        if (note.getNotePass().isEmpty()){
+            startActivityForResult(
+                    new Intent(getApplicationContext(), EditorNoteActivity.class)
+                            .putExtra("isViewOrUpdate", true)
+                            .putExtra("note", note),
+                    REQUEST_CODE_UPDATE_NOTE
+            );
+        }else if(dialogNotePass == null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            View view = LayoutInflater.from(this).inflate(R.layout.layout_dialog, (ViewGroup) findViewById(R.id.cl_note_password_container));
+            builder.setView(view);
+            dialogNotePass = builder.create();
+            if (dialogNotePass.getWindow() != null) {
+                dialogNotePass.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+            }
+            view.findViewById(R.id.tv_note_pass).setOnClickListener(v -> {
+                etNotePass = view.findViewById(R.id.et_note_password);
+                Log.d("sss", String.valueOf(etNotePass));
+                if (etNotePass.getText().toString().trim().equals(note.getNotePass())){
+                    dialogNotePass.dismiss();
+                    startActivityForResult(
+                            new Intent(getApplicationContext(), EditorNoteActivity.class)
+                                    .putExtra("isViewOrUpdate", true)
+                                    .putExtra("note", note),
+                            REQUEST_CODE_UPDATE_NOTE
+                    );
+                }else{
+                    Toast.makeText(this, "Access Denied!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            view.findViewById(R.id.tv_cancel_password).setOnClickListener(v -> {
+                dialogNotePass.dismiss();
+            });
+
+            dialogNotePass.show();
+        }
+//        startActivityForResult(
+//                new Intent(getApplicationContext(), EditorNoteActivity.class)
+//                        .putExtra("isViewOrUpdate", true)
+//                        .putExtra("note", note),
+//                REQUEST_CODE_UPDATE_NOTE
+//        );
     }
 
     @Override

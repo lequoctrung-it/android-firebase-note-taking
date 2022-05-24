@@ -1,14 +1,8 @@
 package com.example.myapplication.Adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.media.ThumbnailUtils;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +75,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
     static class NoteViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvSubtitle, tvDateTime;
+        TextView tvTitle, tvDateTime;
         LinearLayout llNote, llTitleContainer;
         RoundedImageView rivNote;
         ImageView ivPin, ivUnpin;
@@ -89,7 +83,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_title);
-            tvSubtitle = itemView.findViewById(R.id.tv_subtitle);
             tvDateTime = itemView.findViewById(R.id.tv_date_time);
             llNote = itemView.findViewById(R.id.ll_note);
             rivNote = itemView.findViewById(R.id.riv_note);
@@ -102,23 +95,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             // Display note title
             tvTitle.setText(note.getTitle());
 
-            // Display note subtitle
-            if (note.getSubtitle().trim().isEmpty()) {
-                tvSubtitle.setVisibility(View.GONE);
-            }else {
-                tvSubtitle.setText(note.getSubtitle());
-            }
-
             // Display date time
             tvDateTime.setText(note.getDateTime());
-
-            // Apply note color to layout
-            GradientDrawable gradientDrawable = (GradientDrawable) llNote.getBackground();
-            if (note.getColor() != null) {
-                gradientDrawable.setColor(Color.parseColor(note.getColor()));
-            }else {
-                gradientDrawable.setColor(Color.parseColor("#333333"));
-            }
 
             // Set layout to display note with/without media
             if (note.getImagePath() != null) {
@@ -174,7 +152,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     ArrayList<Note> temp = new ArrayList<>();
                     for (Note note : notesSource) {
                         if (note.getTitle().toLowerCase().contains(searchKeyword.toLowerCase())
-                                || note.getSubtitle().toLowerCase().contains(searchKeyword.toLowerCase())
                                 || note.getNoteText().toLowerCase().contains(searchKeyword.toLowerCase())) {
                             temp.add(note);
                         }

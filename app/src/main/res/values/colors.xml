@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_primary">#292929</color>
-    <color name="color_primary_dark">#292929</color>
-    <color name="color_green">#4CAF50</color>
-    <color name="color_accent">#FDBE3B</color>
+    <color name="color_primary">#e7f1f2</color>
+    <color name="color_primary_dark">#A19797</color>
+    <color name="color_green">#00FF37</color>
+    <color name="color_accent">#FFFFFF</color>
     <color name="color_black">#FF000000</color>
-    <color name="color_white">#FFFFFFFF</color>
+    <color name="color_white">#1e7787</color>
     <color name="color_grey">#686868</color>
-    <color name="color_search_icon">#DBDBDB</color>
-    <color name="color_text_hint">#7B7B7B</color>
-    <color name="color_quick_actions_background">#2F2D2E</color>
-    <color name="color_icons">#A4A4A4</color>
+    <color name="color_search_icon">#FFFFFF</color>
+    <color name="color_text_hint">#7E7E7E</color>
+    <color name="color_quick_actions_background">#1e7787</color>
+    <color name="color_icons">#1e7787</color>
     <color name="color_text_subtitle">#CECECE</color>
     <color name="color_default_note_color">#333333</color>
     <color name="color_note_subtitle_text">#FAFAFA</color>
-    <color name="color_miscellaneous_background">#1F1F1F</color>
     <color name="color_note_color_2">#FDBE3B</color>
     <color name="color_note_color_3">#FF4842</color>
     <color name="color_note_color_4">#3A52Fc</color>
     <color name="color_note_color_5">#000000</color>
-    <color name="color_delete">#FF4842</color>
-    <color name="color_search_background">#333333</color>
+    <color name="color_delete">#FF3333</color>
+    <color name="color_search_background">#afd1d7</color>
     <color name="main_color">#FF7F50</color>
 </resources>

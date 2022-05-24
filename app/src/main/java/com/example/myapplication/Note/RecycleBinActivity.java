@@ -46,7 +46,7 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
     public static final int REQUEST_CODE_PERMANENTLY_DELETE_NOTE = 2;
     public static final int REQUEST_CODE_SHOW_NOTES = 3;
     public static final int REQUEST_CODE_DELETE_OUT_OF_DATE_NOTE = 4;
-    public static final int ONE_DAY_TIMESTAMP = 60*60*24;
+    public static final int ONE_DAY_TIMESTAMP = 86400000;
 
     // Declare variables for views
     private RecyclerView rcNotes;

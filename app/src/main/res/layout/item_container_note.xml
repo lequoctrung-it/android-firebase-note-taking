@@ -37,19 +37,8 @@
                 android:layout_marginTop="@dimen/_8sdp"
                 android:fontFamily="@font/poppins_bold"
                 android:includeFontPadding="false"
-                android:textColor="@color/color_white"
+                android:textColor="@color/color_quick_actions_background"
                 android:textSize="@dimen/_13ssp" />
-
-            <TextView
-                android:id="@+id/tv_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/_8sdp"
-                android:layout_marginVertical="@dimen/_4sdp"
-                android:fontFamily="@font/poppins_regular"
-                android:includeFontPadding="false"
-                android:textColor="@color/color_note_subtitle_text"
-                android:textSize="@dimen/_12ssp" />
 
             <TextView
                 android:id="@+id/tv_date_time"
@@ -59,7 +48,7 @@
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:fontFamily="@font/poppins_regular"
                 android:includeFontPadding="false"
-                android:textColor="@color/color_note_subtitle_text"
+                android:textColor="@color/color_text_hint"
                 android:textSize="@dimen/_7ssp" />
         </LinearLayout>
 

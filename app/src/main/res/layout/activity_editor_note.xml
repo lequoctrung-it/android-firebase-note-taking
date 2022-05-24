@@ -76,43 +76,43 @@
                 app:layout_constraintStart_toStartOf="@id/et_input_note_title"
                 app:layout_constraintTop_toBottomOf="@id/et_input_note_title" />
 
-            <EditText
-                android:id="@+id/et_input_note_subtitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_15sdp"
-                android:layout_marginEnd="@dimen/_12sdp"
-                android:background="@null"
-                android:fontFamily="@font/poppins_medium"
-                android:hint="@string/note_subtitle"
-                android:importantForAutofill="no"
-                android:includeFontPadding="false"
-                android:inputType="textMultiLine"
-                android:paddingTop="@dimen/_8sdp"
-                android:textColor="@color/color_text_subtitle"
-                android:textColorHint="@color/color_text_hint"
-                android:textSize="@dimen/_13ssp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/v_subtitle_indicator"
-                app:layout_constraintTop_toBottomOf="@id/tv_date_time" />
+<!--            <EditText-->
+<!--                android:id="@+id/et_input_note_subtitle"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:layout_marginTop="@dimen/_15sdp"-->
+<!--                android:layout_marginEnd="@dimen/_12sdp"-->
+<!--                android:background="@null"-->
+<!--                android:fontFamily="@font/poppins_medium"-->
+<!--                android:hint="@string/note_subtitle"-->
+<!--                android:importantForAutofill="no"-->
+<!--                android:includeFontPadding="false"-->
+<!--                android:inputType="textMultiLine"-->
+<!--                android:paddingTop="@dimen/_8sdp"-->
+<!--                android:textColor="@color/color_text_hint"-->
+<!--                android:textColorHint="@color/color_text_hint"-->
+<!--                android:textSize="@dimen/_13ssp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@id/v_subtitle_indicator"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/tv_date_time" />-->
 
-            <View
-                android:id="@+id/v_subtitle_indicator"
-                android:layout_width="@dimen/_5sdp"
-                android:layout_height="0dp"
-                android:layout_marginStart="@dimen/_12sdp"
-                android:background="@drawable/background_subtitle_indicator"
-                app:layout_constraintBottom_toBottomOf="@id/et_input_note_subtitle"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/et_input_note_subtitle" />
+<!--            <View-->
+<!--                android:id="@+id/v_subtitle_indicator"-->
+<!--                android:layout_width="@dimen/_5sdp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginStart="@dimen/_12sdp"-->
+<!--                android:background="@drawable/background_subtitle_indicator"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/et_input_note_subtitle"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@id/et_input_note_subtitle" />-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cl_media_container"
                 android:layout_marginTop="@dimen/_5sdp"
-                app:layout_constraintTop_toBottomOf="@id/et_input_note_subtitle">
+                app:layout_constraintTop_toBottomOf="@id/tv_date_time">
                 <ImageView
                     android:id="@+id/riv_note"
                     android:layout_width="match_parent"
@@ -221,31 +221,29 @@
                     app:layout_constraintEnd_toEndOf="@id/ll_audio_container"
                     app:layout_constraintTop_toTopOf="@id/ll_audio_container" />
 
-                <EditText
-                    android:id="@+id/date_field"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_12sdp"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:background="@null"
-                    android:fontFamily="@font/poppins_medium"
-                    android:hint="Set Notification in"
-                    android:importantForAutofill="no"
-                    android:includeFontPadding="false"
-                    android:inputType="textMultiLine"
-                    android:paddingTop="@dimen/_8sdp"
-                    android:textColor="@color/color_text_subtitle"
-                    android:textColorHint="@color/color_text_hint"
-                    android:textSize="@dimen/_13ssp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginEnd="@dimen/_12sdp"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/date_field"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="@dimen/_12sdp"-->
+<!--                    android:layout_marginTop="@dimen/_15sdp"-->
+<!--                    android:background="@null"-->
+<!--                    android:fontFamily="@font/poppins_regular"-->
+<!--                    android:hint="Set Notification in"-->
+<!--                    android:importantForAutofill="no"-->
+<!--                    android:includeFontPadding="false"-->
+<!--                    android:inputType="textMultiLine"-->
+<!--                    android:paddingTop="@dimen/_8sdp"-->
+<!--                    android:textColor="@color/color_text_subtitle"-->
+<!--                    android:textColorHint="@color/color_text_hint"-->
+<!--                    android:textSize="@dimen/_10ssp"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    android:layout_marginEnd="@dimen/_12sdp"/>-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
             <EditText
                 android:id="@+id/et_note"
@@ -264,7 +262,7 @@
                 android:inputType="textMultiLine"
                 android:minHeight="@dimen/_100sdp"
                 android:textColorHint="@color/color_text_hint"
-                android:textColor="@color/color_white"
+                android:textColor="@color/color_black"
                 android:textSize="@dimen/_13ssp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cl_media_container" />

@@ -20,5 +20,7 @@
     <string name="undo_note">Undo note</string>
     <string name="share_to">Share to</string>
     <string name="add_audio">Add audio</string>
+    <string name="confirm">Confirm</string>
+    <string name="enter_password">Enter password</string>
 
 </resources>

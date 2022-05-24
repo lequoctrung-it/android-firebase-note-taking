@@ -9,13 +9,11 @@ public class Note implements Serializable {
         this.isPin = false;
     }
 
-    public Note(String title, String dateTime, String subtitle, String noteText, String imagePath, String color, String musicPath) {
+    public Note(String title, String dateTime, String noteText, String imagePath, String musicPath) {
         this.title = title;
         this.dateTime = dateTime;
-        this.subtitle = subtitle;
         this.noteText = noteText;
         this.imagePath = imagePath;
-        this.color = color;
         this.musicPath = musicPath;
         this.isPin = false;
     }
@@ -30,17 +28,23 @@ public class Note implements Serializable {
 
     private long deleteTimestamp;
 
-    private String subtitle;
-
     private String noteText;
 
     private String imagePath;
 
-    private String color;
-
     private String musicPath;
 
     private boolean isPin;
+
+    private String notePass;
+
+    public String getNotePass() {
+        return notePass;
+    }
+
+    public void setNotePass(String notePass) {
+        this.notePass = notePass;
+    }
 
     public boolean isPin() {
         return isPin;
@@ -74,14 +78,6 @@ public class Note implements Serializable {
         this.dateTime = dateTime;
     }
 
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
-
     public String getNoteText() {
         return noteText;
     }
@@ -96,14 +92,6 @@ public class Note implements Serializable {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
     }
 
     public String getMusicPath() {
