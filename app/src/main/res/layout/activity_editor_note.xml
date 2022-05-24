@@ -175,7 +175,7 @@
                     android:gravity="center_horizontal"
                     android:visibility="gone"
                     tools:ignore="MissingConstraints">
-                    
+
                     <TextView
                         android:id="@+id/tv_audio_title"
                         android:layout_width="wrap_content"
@@ -220,6 +220,29 @@
                     app:tint="@color/color_white"
                     app:layout_constraintEnd_toEndOf="@id/ll_audio_container"
                     app:layout_constraintTop_toTopOf="@id/ll_audio_container" />
+
+                <EditText
+                    android:id="@+id/date_field"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:background="@null"
+                    android:fontFamily="@font/poppins_medium"
+                    android:hint="Set Notification in"
+                    android:importantForAutofill="no"
+                    android:includeFontPadding="false"
+                    android:inputType="textMultiLine"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:textColor="@color/color_text_subtitle"
+                    android:textColorHint="@color/color_text_hint"
+                    android:textSize="@dimen/_13ssp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginEnd="@dimen/_12sdp"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

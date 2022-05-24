@@ -6,10 +6,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,7 +30,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -34,6 +45,7 @@ import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -43,6 +55,8 @@ import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -55,6 +69,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -78,6 +94,9 @@ public class EditorNoteActivity extends AppCompatActivity {
 
     private AlertDialog dialogDeleteNote;
 
+    private LinearLayout llAddTime;
+    private TextView DateField;
+
     // Others
     private String selectedNoteColor;
     private String selectedImagePath;
@@ -88,6 +107,14 @@ public class EditorNoteActivity extends AppCompatActivity {
     private String duration;
     private ScheduledExecutorService timer;
     MediaPlayer mediaPlayer;
+
+
+    //Noti
+    private AlarmManager alarmManager;
+    private MaterialTimePicker picker;
+    private Calendar calendar;
+
+    private PendingIntent pendingIntent;
 
 
     // Declare and initialize a Cloud Firestore instance
@@ -110,6 +137,7 @@ public class EditorNoteActivity extends AppCompatActivity {
 
         initializeModal();
         setSubtitleIndicatorColor();
+        createNotificationChannel();
     }
 
     private void initializeViews() {
@@ -127,6 +155,8 @@ public class EditorNoteActivity extends AppCompatActivity {
         ivPlay = findViewById(R.id.iv_play);
         sbAudio = findViewById(R.id.sb_audio);
         llAudioContainer = findViewById(R.id.ll_audio_container);
+        llAddTime = findViewById(R.id.ll_add_time);
+        DateField = findViewById(R.id.date_field);
 
         tvDateTime.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault()).format(new Date()));
         selectedNoteColor = "#333333";
@@ -251,6 +281,8 @@ public class EditorNoteActivity extends AppCompatActivity {
                 findViewById(R.id.iv_remove_video).setVisibility(View.VISIBLE);
             }else {
                 // Case: image
+//                ivNote.setImageBitmap(BitmapFactory.decodeFile(currentNote.getImagePath()));
+
                 Glide.with(getApplicationContext())
                         .load(currentNote.getImagePath())
                         .into(ivNote);
@@ -580,6 +612,18 @@ public class EditorNoteActivity extends AppCompatActivity {
                 selectImage();
             }
         });
+        //Set alarm
+        llAddTime.setOnClickListener(v -> {
+//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            showTimePicker();
+//            createNotificationChannel();
+            DialogFragment newFragment = new TimePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "setAlarm");
+        });
+
+
+
+
 
         // Handle delete button in case current note is available
         if (currentNote != null) {
@@ -632,6 +676,8 @@ public class EditorNoteActivity extends AppCompatActivity {
         Intent shareIntent = Intent.createChooser(sendIntent, null);
         startActivity(shareIntent);
     }
+
+
 
     private void showDeleteNoteDialog() {
         if (dialogDeleteNote == null) {
@@ -906,4 +952,18 @@ public class EditorNoteActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
         }
     }
+
+    private void createNotificationChannel() {
+       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+           CharSequence name = "setAlarmReminderChannel";
+           String description = "Channel for Alarm Manager";
+           int importance = NotificationManager.IMPORTANCE_HIGH;
+           NotificationChannel channel = new NotificationChannel("setAlarm", name, importance);
+           channel.setDescription(description);
+
+           NotificationManager notificationManager = getSystemService(NotificationManager.class);
+           notificationManager.createNotificationChannel(channel);
+       }
+    }
+
 }
