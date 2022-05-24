@@ -58,7 +58,7 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
     private NotesAdapter notesAdapter;
     private List<Note> noteList;
     private boolean flag = true;
-    private String storageRootUrl = "https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/media/";
+    private String storageRootUrl = "https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/";
 
     // Declare and initialize a Cloud Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -172,6 +172,11 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
         dialogPermanentlyDeleteNote.show();
     }
 
+    @Override
+    public void onPinClicked(Note note, int position) {
+
+    }
+
     private void deleteNoteFromRecycleBin(int requestCode, Note note) {
         db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("recycle bin").document(note.getNoteId())
                 .delete()
@@ -182,8 +187,14 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
                             // Case: permanently delete note
                             if (!note.getImagePath().isEmpty()) {
                                 // Delete media in storage in case note contain media
-                                String fileName = note.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
+                                String fileName = note.getImagePath().split(storageRootUrl + "media/")[1].replace("%20", " ");
                                 deleteMediaInStorage(fileName);
+                            }
+
+                            if (!note.getMusicPath().isEmpty()) {
+                                // Delete audio in storage in case note contain media
+                                String fileName = note.getMusicPath().split(storageRootUrl + "audio/")[1].replace("%20", " ");
+                                deleteAudioInStorage(fileName);
                             }
                             backToPreviousScreen(false);
                         } else if (requestCode == REQUEST_CODE_UNDO_NOTE) {
@@ -199,8 +210,13 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
                             // Case: delete out of date note
                             if (!note.getImagePath().isEmpty()) {
                                 // Delete media in storage in case note contain media
-                                String fileName = note.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
+                                String fileName = note.getImagePath().split(storageRootUrl + "media/")[1].replace("%20", " ");
                                 deleteMediaInStorage(fileName);
+                            }
+
+                            if (!note.getMusicPath().isEmpty()) {
+                                String fileName = note.getMusicPath().split(storageRootUrl + "audio/")[1].replace("%20", " ");
+                                deleteAudioInStorage(fileName);
                             }
                         }
                         Log.d("TAG", "DocumentSnapshot successfully undo!");
@@ -212,6 +228,21 @@ public class RecycleBinActivity extends AppCompatActivity implements NotesListen
                         Log.w("TAG", "Error deleting document", e);
                     }
                 });
+    }
+
+    private void deleteAudioInStorage(String fileName) {
+        StorageReference fileRef = storageRef.child("audio/" + fileName);
+        fileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Storage Delete", "File delete successfully");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Storage Delete", "Delete fail: " + e);
+            }
+        });
     }
 
     private void insertDeleteNoteToNoteListFirebase(Note note) {

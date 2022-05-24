@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -20,8 +21,11 @@ import com.example.myapplication.Entities.Note;
 import com.example.myapplication.Listeners.NotesListener;
 import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -142,6 +146,33 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
     }
 
     @Override
+    public void onPinClicked(Note note, int position) {
+        if (note.isPin()) {
+            // Case: note pinned
+            // Update field pin on firestore
+            updatePinNote(note);
+
+            // Handling UI
+            findViewById(R.id.iv_pin).setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_unpin).setVisibility(View.GONE);
+
+            // Handling notes list
+            getNotes(REQUEST_CODE_UNDO_NOTE, false);
+        } else {
+            // Case: note unpinned
+            // Update field pin on firestore
+            updatePinNote(note);
+
+            // Handling UI
+            findViewById(R.id.iv_pin).setVisibility(View.GONE);
+            findViewById(R.id.iv_unpin).setVisibility(View.VISIBLE);
+
+            // Handling notes list
+            getNotes(REQUEST_CODE_UNDO_NOTE, false);
+        }
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_ADD_NOTE && resultCode == RESULT_OK) {
@@ -166,12 +197,16 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
                 if (task.isSuccessful()) {
                     // Create an empty notes list
                     List<Note> notes = new ArrayList<>();
-
+                    List<Note> pinNotes = new ArrayList<>();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Note note = document.toObject(Note.class);
+                        if (note.isPin()) {
+                            pinNotes.add(note);
+                            continue;
+                        }
                         notes.add(note);
                     }
-
+                    notes.addAll(0, pinNotes);
                     // UI handling
                     if (requestCode == REQUEST_CODE_SHOW_NOTES) {
                         // Case show notes: show all.
@@ -203,4 +238,21 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
             }
         });
     };
+
+    public void updatePinNote(Note note) {
+        DocumentReference noteRef = db.collection("users").document(FirebaseAuth.getInstance().getCurrentUser().getUid()).collection("notes").document(note.getNoteId());
+        noteRef.update("pin", note.isPin())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("updatePinNote", "Update pin success!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("updatePinNote", "Update pin fail!");
+                    }
+                });
+    }
 }

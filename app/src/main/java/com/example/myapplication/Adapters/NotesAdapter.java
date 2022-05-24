@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -24,7 +25,6 @@ import com.example.myapplication.Listeners.NotesListener;
 import com.example.myapplication.R;
 import com.makeramen.roundedimageview.RoundedImageView;
 
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -54,8 +54,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         holder.setNote(notes.get(position), context);
-        holder.llNote.setOnClickListener(v -> {
+        holder.llTitleContainer.setOnClickListener(v -> {
             notesListener.onNoteClicked(notes.get(position), position);
+        });
+        holder.rivNote.setOnClickListener(v -> {
+            notesListener.onNoteClicked(notes.get(position), position);
+        });
+        holder.ivPin.setOnClickListener(v -> {
+            notes.get(position).setPin(false);
+            notesListener.onPinClicked(notes.get(position), position);
+        });
+        holder.ivUnpin.setOnClickListener(v -> {
+            notes.get(position).setPin(true);
+            notesListener.onPinClicked(notes.get(position), position);
         });
     }
 
@@ -71,8 +82,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     static class NoteViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvSubtitle, tvDateTime;
-        LinearLayout llNote;
+        LinearLayout llNote, llTitleContainer;
         RoundedImageView rivNote;
+        ImageView ivPin, ivUnpin;
 
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -81,6 +93,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             tvDateTime = itemView.findViewById(R.id.tv_date_time);
             llNote = itemView.findViewById(R.id.ll_note);
             rivNote = itemView.findViewById(R.id.riv_note);
+            ivPin = itemView.findViewById(R.id.iv_pin);
+            ivUnpin = itemView.findViewById(R.id.iv_unpin);
+            llTitleContainer = itemView.findViewById(R.id.ll_title_container);
         }
 
         void setNote(Note note, Context context) {
@@ -119,6 +134,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 rivNote.setVisibility(View.VISIBLE);
             }else {
                 rivNote.setVisibility(View.GONE);
+            }
+
+            // Visible icon pin/unpin
+            if (note.isPin()) {
+                ivPin.setVisibility(View.VISIBLE);
+                ivUnpin.setVisibility(View.GONE);
+            } else {
+                ivPin.setVisibility(View.GONE);
+                ivUnpin.setVisibility(View.VISIBLE);
             }
         }
     }

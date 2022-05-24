@@ -18,5 +18,7 @@
     <string name="recycle_bin">Recycle Bin</string>
     <string name="permanently_delete_note">Permanently delete note</string>
     <string name="undo_note">Undo note</string>
+    <string name="share_to">Share to</string>
+    <string name="add_audio">Add audio</string>
 
 </resources>

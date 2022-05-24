@@ -111,6 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/cl_media_container"
+                android:layout_marginTop="@dimen/_5sdp"
                 app:layout_constraintTop_toBottomOf="@id/et_input_note_subtitle">
                 <ImageView
                     android:id="@+id/riv_note"
@@ -121,7 +122,7 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/app_name"
                     android:visibility="gone"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toBottomOf="@+id/ll_audio_container" />
 
                 <VideoView
                     android:id="@+id/videoView"
@@ -132,7 +133,7 @@
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/app_name"
                     android:visibility="gone"
-                    tools:ignore="MissingConstraints" />
+                    app:layout_constraintTop_toBottomOf="@+id/ll_audio_container" />
 
                 <ImageView
                     android:id="@+id/iv_remove_image"
@@ -163,6 +164,62 @@
                     app:tint="@color/color_white"
                     app:layout_constraintEnd_toEndOf="@id/videoView"
                     app:layout_constraintTop_toTopOf="@id/videoView" />
+
+                <LinearLayout
+                    android:id="@+id/ll_audio_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_10sdp"
+                    android:background="@drawable/background_note"
+                    android:gravity="center_horizontal"
+                    android:visibility="gone"
+                    tools:ignore="MissingConstraints">
+                    
+                    <TextView
+                        android:id="@+id/tv_audio_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_13ssp"
+                        android:text="Title" />
+                    <SeekBar
+                        android:id="@+id/sb_audio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="100"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:padding="@dimen/_10sdp" />
+                    <TextView
+                        android:id="@+id/tv_audio_duration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/_13ssp"
+                        android:padding="@dimen/_10sdp"
+                        android:text="00:00 / 00:00" />
+                    <ImageView
+                        android:id="@+id/iv_play"
+                        android:layout_width="@dimen/_23sdp"
+                        android:layout_height="@dimen/_23sdp"
+                        android:contentDescription="@string/app_name"
+                        android:src="@drawable/ic_play"
+                        app:tint="@color/color_icons"
+                        />
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_remove_audio"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:background="@drawable/background_delete"
+                    android:contentDescription="@string/app_name"
+                    android:padding="@dimen/_4sdp"
+                    android:src="@drawable/ic_delete"
+                    android:visibility="gone"
+                    app:tint="@color/color_white"
+                    app:layout_constraintEnd_toEndOf="@id/ll_audio_container"
+                    app:layout_constraintTop_toTopOf="@id/ll_audio_container" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

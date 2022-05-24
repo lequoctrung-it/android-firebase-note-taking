@@ -19,14 +19,17 @@
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_search.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_subtitle_indicator.xml" value="0.1375" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/home.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_back.xml" value="0.141" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_baseline_format_list_bulleted_24.xml" value="0.1455" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_delete.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_grid.xml" value="0.137" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1365" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_pin.xml" value="0.141" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/label.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/rounded_edittext.xml" value="0.1365" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/selector.xml" value="0.1365" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_editor_note.xml" value="0.176" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/unpin.xml" value="0.141" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_editor_note.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_forgot_password.xml" value="0.1334853090172239" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_login.xml" value="0.24" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_main.xml" value="0.4" />

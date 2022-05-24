@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Note implements Serializable {
     public Note() {
+        this.isPin = false;
     }
 
     public Note(String title, String dateTime, String subtitle, String noteText, String imagePath, String color, String musicPath) {
@@ -16,6 +17,7 @@ public class Note implements Serializable {
         this.imagePath = imagePath;
         this.color = color;
         this.musicPath = musicPath;
+        this.isPin = false;
     }
 
     private String id;
@@ -37,6 +39,16 @@ public class Note implements Serializable {
     private String color;
 
     private String musicPath;
+
+    private boolean isPin;
+
+    public boolean isPin() {
+        return isPin;
+    }
+
+    public void setPin(boolean pin) {
+        isPin = pin;
+    }
 
     public String getNoteId() {
         return id;

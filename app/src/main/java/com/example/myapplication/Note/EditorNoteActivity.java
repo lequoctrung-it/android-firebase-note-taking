@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -31,6 +32,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -45,39 +47,48 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class EditorNoteActivity extends AppCompatActivity {
     // Declare and initialize constant variables
     public static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
     public static final int REQUEST_CODE_SELECT_IMAGE = 2;
-    public static final int REQUEST_CODE_UPDATE_NOTE = 3;
-    public static final int REQUEST_CODE_ADD_NOTE = 4;
+    public static final int REQUEST_CODE_PICK_AUDIO = 5;
 
     // Declare variables for views
     private EditText etNoteTitle, etNoteSubtitle, etNoteContent;
-    private TextView tvDateTime;
+    private TextView tvDateTime, tvAudioDuration, tvAudioTitle;
     private View viewSubtitleIndicator;
-    private ImageView ivNote, ivBack, ivSave;
+    private ImageView ivNote, ivBack, ivSave, ivPlay;
     private VideoView vvNote;
+    private SeekBar sbAudio;
+    private LinearLayout llAudioContainer;
 
     private AlertDialog dialogDeleteNote;
 
     // Others
     private String selectedNoteColor;
     private String selectedImagePath;
+    private String selectedAudioPath;
     private Note currentNote;
     private Dialog dialogLoading;
-    private String storageRootUrl = "https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/media/";
+    private String storageRootUrl = "https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/";
+    private String duration;
+    private ScheduledExecutorService timer;
+    MediaPlayer mediaPlayer;
+
 
     // Declare and initialize a Cloud Firestore instance
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -111,16 +122,25 @@ public class EditorNoteActivity extends AppCompatActivity {
         vvNote = findViewById(R.id.videoView);
         ivBack = findViewById(R.id.iv_back);
         ivSave = findViewById(R.id.iv_save);
+        tvAudioDuration = findViewById(R.id.tv_audio_duration);
+        tvAudioTitle = findViewById(R.id.tv_audio_title);
+        ivPlay = findViewById(R.id.iv_play);
+        sbAudio = findViewById(R.id.sb_audio);
+        llAudioContainer = findViewById(R.id.ll_audio_container);
 
         tvDateTime.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault()).format(new Date()));
         selectedNoteColor = "#333333";
         selectedImagePath = "";
+        selectedAudioPath = "";
     }
 
     private void manipulateViews() {
         // Back button onclick
         ivBack.setOnClickListener(v -> {
             onBackPressed();
+            if (mediaPlayer != null) {
+                releaseMediaPlayer();
+            }
         });
 
         // Save button onclick
@@ -142,6 +162,65 @@ public class EditorNoteActivity extends AppCompatActivity {
             vvNote.setVisibility(View.GONE);
             findViewById(R.id.iv_remove_video).setVisibility(View.GONE);
             selectedImagePath = "";
+        });
+
+        // Play button onclick
+        ivPlay.setOnClickListener(v -> {
+            if (mediaPlayer != null) {
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.pause();
+                    ivPlay.setImageResource(R.drawable.ic_play);
+                    timer.shutdown();
+                } else {
+                    mediaPlayer.start();
+                    ivPlay.setImageResource(R.drawable.ic_pause);
+                    timer = Executors.newScheduledThreadPool(1);
+                    timer.scheduleAtFixedRate(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (mediaPlayer != null) {
+                                if (!sbAudio.isPressed()) {
+                                    sbAudio.setProgress(mediaPlayer.getCurrentPosition());
+                                }
+                            }
+                        }
+                    }, 10, 10, TimeUnit.MILLISECONDS);
+                }
+            }
+        });
+
+        // Remove video onclick
+        findViewById(R.id.iv_remove_audio).setOnClickListener(v -> {
+            releaseMediaPlayer();
+            llAudioContainer.setVisibility(View.GONE);
+            findViewById(R.id.iv_remove_audio).setVisibility(View.GONE);
+            selectedAudioPath = "";
+        });
+
+        // Handling seekbar for audio in case user pick audio
+        sbAudio.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                if (mediaPlayer != null) {
+                    int millis = mediaPlayer.getCurrentPosition();
+                    long total_secs = TimeUnit.SECONDS.convert(millis, TimeUnit.MILLISECONDS);
+                    long mins = TimeUnit.MINUTES.convert(total_secs, TimeUnit.SECONDS);
+                    long secs = total_secs - (mins * 60);
+                    tvAudioDuration.setText(mins + ":" + secs + " / " + duration);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (mediaPlayer != null) {
+                    mediaPlayer.seekTo(sbAudio.getProgress());
+                }
+            }
         });
     }
 
@@ -183,6 +262,12 @@ public class EditorNoteActivity extends AppCompatActivity {
             }
             selectedImagePath = currentNote.getImagePath();
         }
+
+        if (currentNote.getMusicPath() != null && !currentNote.getMusicPath().trim().isEmpty()) {
+            createAudioPlayer(Uri.parse(currentNote.getMusicPath()));
+            findViewById(R.id.iv_remove_audio).setVisibility(View.VISIBLE);
+            selectedAudioPath = currentNote.getMusicPath();
+        }
     }
 
     private void saveNote() {
@@ -206,47 +291,86 @@ public class EditorNoteActivity extends AppCompatActivity {
         note.setTimestamp(new Timestamp(System.currentTimeMillis()).getTime());
         note.setColor(selectedNoteColor);
         note.setImagePath(selectedImagePath);
+        note.setMusicPath(selectedAudioPath);
 
         // Update note by set the ID to override note
         if (currentNote != null) {
             note.setNoteId(currentNote.getNoteId());
         }
 
-        // Check update or add
-        if (currentNote != null) {
-            // Case: update note
-            if (currentNote.getImagePath().isEmpty()) {
-                // Case: No image
-                if (note.getImagePath().isEmpty()) {
-                    // Case: No upload
+        class UpdateNoteTask extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                if (currentNote != null) {
+                    if (!currentNote.getImagePath().equals(note.getImagePath())) {
+                        // Delete current media in storage in case new image path different from current image path
+                        if (currentNote.getImagePath() != null && !currentNote.getImagePath().isEmpty()) {
+                            String fileName = currentNote.getImagePath().split(storageRootUrl + "media/")[1].replace("%20", " ");
+                            deleteMediaInStorage(fileName);
+                        }
+                        if (note.getImagePath() != null && !note.getImagePath().isEmpty()) {
+                            // Add new media in case new image path is not empty
+                            uploadMediaToStorage(note);
+                            note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + Uri.fromFile(new File(note.getImagePath())).getLastPathSegment().replace(" ", "%20"));
+                        }
+                    }
+
+                    if (!currentNote.getMusicPath().equals(note.getMusicPath())) {
+                        // Delete current audio in storage in case new image path different from current image path
+                        if (currentNote.getMusicPath() != null && !currentNote.getMusicPath().isEmpty()) {
+                            String fileName = currentNote.getMusicPath().split(storageRootUrl + "audio/")[1].replace("%20", " ");
+                            deleteAudioInStorage(fileName);
+                        }
+                        if (note.getMusicPath() != null && !note.getMusicPath().isEmpty()) {
+                            // Add new audio in case new image path is not empty
+                            uploadAudioToStorage(note);
+                            note.setMusicPath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "audio/" + getNameFromUri(Uri.parse(note.getMusicPath())).replace(" ", "%20"));
+                        }
+                    }
+
+                    // UpdateNoteToFirestore()
                     updateNoteToFirestore(note);
                 } else {
-                    // Case: Upload
-                    uploadMediaToStorage(REQUEST_CODE_UPDATE_NOTE, note);
+                    if (note.getImagePath() != null && !note.getImagePath().isEmpty()) {
+                        // Add new media in case new image path is not empty
+                        uploadMediaToStorage(note);
+                        note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + Uri.fromFile(new File(note.getImagePath())).getLastPathSegment().replace(" ", "%20"));
+                    }
+
+                    if (note.getMusicPath() != null && !note.getMusicPath().isEmpty()) {
+                        // Add new audio in case new image path is not empty
+                        uploadAudioToStorage(note);
+                        note.setMusicPath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "audio/" + getNameFromUri(Uri.parse(note.getMusicPath())).replace(" ", "%20"));
+                    }
+
+                    // AddNoteToFirestore()
+                    addNoteToFirestore(note);
                 }
-            } else {
-                // Case: Have image
-                if (note.getImagePath().isEmpty()) {
-                    // Case: Delete current image
-                    String fileName = currentNote.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
-                    deleteMediaInStorage(fileName);
-                    updateNoteToFirestore(note);
-                } else {
-                    // Case: Replace image
-                    String fileName = currentNote.getImagePath().split(storageRootUrl)[1].replace("%20", " ");
-                    deleteMediaInStorage(fileName);
-                    uploadMediaToStorage(REQUEST_CODE_UPDATE_NOTE, note);
-                }
+                return null;
             }
-        } else {
-            // Case: add note
-            // Upload media to storage
-            if (!note.getImagePath().isEmpty()) {
-                uploadMediaToStorage(REQUEST_CODE_ADD_NOTE, note);
-            } else {
-                addNoteToFirestore(note);
+
+            @Override
+            protected void onProgressUpdate(Void... values) {
+                super.onProgressUpdate(values);
+                showLoadingDialog();
+            }
+
+            @Override
+            protected void onPostExecute(Void unused) {
+                super.onPostExecute(unused);
+                if (dialogLoading != null) {
+                    dialogLoading.dismiss();
+                }
+                if (mediaPlayer != null) {
+                    releaseMediaPlayer();
+                }
+                setResult(RESULT_OK, new Intent());
+                finish();
             }
         }
+
+        new UpdateNoteTask().execute();
     }
 
     private void deleteMediaInStorage(String fileName) {
@@ -264,7 +388,22 @@ public class EditorNoteActivity extends AppCompatActivity {
         });
     }
 
-    private void uploadMediaToStorage(int requestCode, Note note) {
+    private void deleteAudioInStorage(String fileName) {
+        StorageReference fileRef = storageRef.child("audio/" + fileName);
+        fileRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                Log.d("Storage Delete", "File delete successfully");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("Storage Delete", "Delete fail: " + e);
+            }
+        });
+    }
+
+    private void uploadMediaToStorage(Note note) {
         Uri file = Uri.fromFile(new File(note.getImagePath()));
         StorageReference mediaRef = storageRef.child("media/" + file.getLastPathSegment());
         UploadTask uploadTask = mediaRef.putFile(file);
@@ -273,16 +412,7 @@ public class EditorNoteActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Dismiss loading dialog
-                        dialogLoading.dismiss();
-
-                        // Store public image url to note
-                        note.setImagePath("https://storage.googleapis.com/todolist-auth-1b6a9.appspot.com/" + "media/" + file.getLastPathSegment().replace(" ", "%20"));
-                        if (requestCode == REQUEST_CODE_ADD_NOTE) {
-                            addNoteToFirestore(note);
-                        } else if (requestCode == REQUEST_CODE_UPDATE_NOTE) {
-                            updateNoteToFirestore(note);
-                        }
+                        Log.d("Upload media success", "Done");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -290,12 +420,24 @@ public class EditorNoteActivity extends AppCompatActivity {
                     public void onFailure(@NonNull Exception e) {
                         Log.d("Upload media fail", String.valueOf(e));
                     }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                });
+    }
+
+    private void uploadAudioToStorage(Note note) {
+        StorageReference mediaRef = storageRef.child("audio/" + getNameFromUri(Uri.parse(note.getMusicPath())));
+        UploadTask uploadTask = mediaRef.putFile(Uri.parse(note.getMusicPath()));
+
+        uploadTask
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        // Loading progress bar goes here
-                        showLoadingDialog();
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Log.d("Upload audio success", "Done");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Upload audio fail", String.valueOf(e));
                     }
                 });
     }
@@ -307,8 +449,6 @@ public class EditorNoteActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        setResult(RESULT_OK, new Intent());
-                        finish();
                         Log.d("Firestore", "Document update successfully");
                     }
                 })
@@ -328,8 +468,6 @@ public class EditorNoteActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        setResult(RESULT_OK, new Intent());
-                        finish();
                         Log.d("Firestore", "Document add successfully");
                     }
                 })
@@ -451,6 +589,48 @@ public class EditorNoteActivity extends AppCompatActivity {
                 showDeleteNoteDialog();
             });
         }
+
+        // Handle share button
+        if (currentNote != null) {
+            llModal.findViewById(R.id.ll_share).setVisibility(View.VISIBLE);
+            llModal.findViewById(R.id.ll_share).setOnClickListener(v -> {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                showAndroidSharesheet(currentNote);
+            });
+        }
+
+        // Handle add audio button
+        llModal.findViewById(R.id.ll_add_audio).setOnClickListener(v -> {
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            // Check Read external storage permission and request permission
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        EditorNoteActivity.this,
+                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                        REQUEST_CODE_STORAGE_PERMISSION
+                );
+            }else {
+                selectAudio();
+            }
+        });
+
+    }
+
+    private void selectAudio() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("audio/*");
+        startActivityForResult(intent, REQUEST_CODE_PICK_AUDIO);
+    }
+
+    private void showAndroidSharesheet(Note note) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Note content: " + note.getNoteText());
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
     }
 
     private void showDeleteNoteDialog() {
@@ -492,6 +672,9 @@ public class EditorNoteActivity extends AppCompatActivity {
                     protected void onPostExecute(Void unused) {
                         super.onPostExecute(unused);
                         dialogDeleteNote.dismiss();
+                        if (mediaPlayer != null) {
+                            releaseMediaPlayer();
+                        }
                         setResult(
                                 RESULT_OK,
                                 new Intent()
@@ -558,44 +741,127 @@ public class EditorNoteActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_SELECT_IMAGE && resultCode == RESULT_OK) {
             if (data != null) {
                 Uri selectMediaUri = data.getData();
-                if (selectMediaUri != null) {
-                    try {
-                        // Check if media is video or image
-                        if (isVideoFile(getPathFromUri(selectMediaUri))) {
-                            // Case: video
-                            MediaController mc = new MediaController(this);
-                            vvNote.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                                @Override
-                                public void onPrepared(MediaPlayer mediaPlayer) {
-                                    mc.setAnchorView(vvNote);
-                                    vvNote.start();
-                                }
-                            });
-                            vvNote.setMediaController(mc);
-                            vvNote.setVideoURI(selectMediaUri);
-
-                            vvNote.setVisibility(View.VISIBLE);
-                            ivNote.setVisibility(View.GONE);
-                            findViewById(R.id.iv_remove_image).setVisibility(View.GONE);
-                            findViewById(R.id.iv_remove_video).setVisibility(View.VISIBLE);
-                        }else {
-                            // Case: image
-                            InputStream inputStream = getContentResolver().openInputStream(selectMediaUri);
-                            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                            ivNote.setImageBitmap(bitmap);
-
-                            ivNote.setVisibility(View.VISIBLE);
-                            vvNote.setVisibility(View.GONE);
-                            findViewById(R.id.iv_remove_image).setVisibility(View.VISIBLE);
-                            findViewById(R.id.iv_remove_video).setVisibility(View.GONE);
-                        }
-                        selectedImagePath = getPathFromUri(selectMediaUri);
-                    }catch (Exception e) {
-                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
+                displayMedia(selectMediaUri);
+            }
+        } else if (requestCode == REQUEST_CODE_PICK_AUDIO && resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri uri = data.getData();
+                createAudioPlayer(uri);
             }
         }
+    }
+
+    private void displayMedia(Uri selectMediaUri) {
+        if (selectMediaUri != null) {
+            try {
+                // Check if media is video or image
+                if (isVideoFile(getPathFromUri(selectMediaUri))) {
+                    // Case: video
+                    MediaController mc = new MediaController(this);
+                    vvNote.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mediaPlayer) {
+                            mc.setAnchorView(vvNote);
+                            vvNote.start();
+                        }
+                    });
+                    vvNote.setMediaController(mc);
+                    vvNote.setVideoURI(selectMediaUri);
+
+                    vvNote.setVisibility(View.VISIBLE);
+                    ivNote.setVisibility(View.GONE);
+                    findViewById(R.id.iv_remove_image).setVisibility(View.GONE);
+                    findViewById(R.id.iv_remove_video).setVisibility(View.VISIBLE);
+                }else {
+                    // Case: image
+                    InputStream inputStream = getContentResolver().openInputStream(selectMediaUri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
+                    ivNote.setImageBitmap(bitmap);
+
+                    ivNote.setVisibility(View.VISIBLE);
+                    vvNote.setVisibility(View.GONE);
+                    findViewById(R.id.iv_remove_image).setVisibility(View.VISIBLE);
+                    findViewById(R.id.iv_remove_video).setVisibility(View.GONE);
+                }
+                selectedImagePath = getPathFromUri(selectMediaUri);
+            }catch (Exception e) {
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void createAudioPlayer(Uri uri) {
+        if (uri != null) {
+            llAudioContainer.setVisibility(View.VISIBLE);
+            findViewById(R.id.iv_remove_audio).setVisibility(View.VISIBLE);
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .build()
+            );
+            try {
+                mediaPlayer.setDataSource(getApplicationContext(), uri);
+                mediaPlayer.prepare();
+
+                tvAudioTitle.setText(getNameFromUri(uri));
+
+                int millis = mediaPlayer.getDuration();
+                long total_secs = TimeUnit.SECONDS.convert(millis, TimeUnit.MILLISECONDS);
+                long mins = TimeUnit.MINUTES.convert(total_secs, TimeUnit.SECONDS);
+                long secs = total_secs - (mins * 60);
+                duration = mins + ":" + secs;
+                tvAudioDuration.setText("00:00 / " + duration);
+                sbAudio.setMax(millis);
+                sbAudio.setProgress(0);
+
+                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mediaPlayer) {
+                        ivPlay.setImageResource(R.drawable.ic_play);
+//                    releaseMediaPlayer();
+                    }
+                });
+
+                selectedAudioPath = String.valueOf(uri);
+            } catch (IOException e) {
+                Log.e("Play Audio Error", e.toString());
+            }
+        }
+    }
+
+    private void releaseMediaPlayer() {
+        if (timer != null) {
+            timer.shutdown();
+        }
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+        tvAudioTitle.setText("TITLE");
+        tvAudioDuration.setText("00:00 / 00:00");
+        sbAudio.setMax(100);
+        sbAudio.setProgress(0);
+    }
+
+    @SuppressLint("Range")
+    private String getNameFromUri(Uri uri) {
+        String fileName = "";
+        Cursor cursor = null;
+        cursor = getContentResolver().query(uri, new String[] {
+                MediaStore.Images.ImageColumns.DISPLAY_NAME
+        }, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            fileName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return fileName;
     }
 
     private String getPathFromUri(Uri contentUri) {
