@@ -1,15 +1,26 @@
 package com.example.myapplication.Note;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -21,7 +32,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -35,6 +48,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -44,6 +58,8 @@ import com.example.myapplication.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,6 +73,7 @@ import java.io.InputStream;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -75,11 +92,22 @@ public class EditorNoteActivity extends AppCompatActivity {
 
     private AlertDialog dialogDeleteNote;
 
+    private LinearLayout llAddTime;
+    private TextView DateField;
+
     // Others
     private String selectedNoteColor;
     private String selectedImagePath;
     private Note currentNote;
     private Dialog dialogLoading;
+
+
+    //Noti
+    private AlarmManager alarmManager;
+    private MaterialTimePicker picker;
+    private Calendar calendar;
+
+    private PendingIntent pendingIntent;
 
 
     // Declare and initialize a Cloud Firestore instance
@@ -102,6 +130,7 @@ public class EditorNoteActivity extends AppCompatActivity {
 
         initializeModal();
         setSubtitleIndicatorColor();
+        createNotificationChannel();
     }
 
     private void initializeViews() {
@@ -114,6 +143,8 @@ public class EditorNoteActivity extends AppCompatActivity {
         vvNote = findViewById(R.id.videoView);
         ivBack = findViewById(R.id.iv_back);
         ivSave = findViewById(R.id.iv_save);
+        llAddTime = findViewById(R.id.ll_add_time);
+        DateField = findViewById(R.id.date_field);
 
         tvDateTime.setText(new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm a", Locale.getDefault()).format(new Date()));
         selectedNoteColor = "#333333";
@@ -432,6 +463,18 @@ public class EditorNoteActivity extends AppCompatActivity {
                 selectImage();
             }
         });
+        //Set alarm
+        llAddTime.setOnClickListener(v -> {
+//            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            showTimePicker();
+//            createNotificationChannel();
+            DialogFragment newFragment = new TimePickerFragment();
+            newFragment.show(getSupportFragmentManager(), "setAlarm");
+        });
+
+
+
+
 
         // Handle delete button in case current note is available
         if (currentNote != null) {
@@ -442,6 +485,8 @@ public class EditorNoteActivity extends AppCompatActivity {
             });
         }
     }
+
+
 
     private void showDeleteNoteDialog() {
         if (dialogDeleteNote == null) {
@@ -609,4 +654,84 @@ public class EditorNoteActivity extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_CODE_SELECT_IMAGE);
         }
     }
+
+//    private void setAlarm(){
+//        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(this, AlarmReceiver.class);
+//
+//        pendingIntent = PendingIntent.getBroadcast(this,0,intent,PendingIntent.FLAG_IMMUTABLE);
+//
+//        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),
+//                AlarmManager.INTERVAL_DAY,pendingIntent);
+//
+//        Log.e(TAG, "DC ROI:"+calendar);
+//    }
+
+
+//    private void showTimePicker() {
+//        picker = new MaterialTimePicker.Builder()
+//                .setTimeFormat(TimeFormat.CLOCK_12H)
+//                .setHour(12)
+//                .setMinute(0)
+//                .setTitleText("Select Alarm Time")
+//                .build();
+//
+//        picker.show(getSupportFragmentManager(),"setAlarm");
+//
+//        picker.addOnPositiveButtonClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(picker.getHour()>12){
+//                   DateField.setText(
+//                           String.format("%02d",(picker.getHour()-12)+" : "+String.format("%02d",picker.getMinute())+" PM")
+//                   );
+//                }else{
+//                    DateField.setText(picker.getHour()+" : "+ picker.getMinute()+" AM");
+//                }
+//
+//                calendar = Calendar.getInstance();
+//                calendar.set(Calendar.HOUR_OF_DAY,picker.getHour());
+//                calendar.set(Calendar.MINUTE,picker.getMinute());
+//                calendar.set(Calendar.SECOND,0);
+//                calendar.set(Calendar.MILLISECOND,0);
+//            }
+//        });
+
+//        calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int minute = calendar.get(Calendar.MINUTE);
+//
+//        TimePickerFragment dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+//            @Override
+//            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                String time = hourOfDay + ":" + minute;
+//                DateField.setText(time);
+//
+//                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+//                calendar.set(Calendar.MINUTE,minute);
+//                setAlarm();
+//            }
+//        }, hour, minute, true);
+//
+//        dialog.show(getPar,"setAlarm");
+//
+// }
+
+    private void createNotificationChannel() {
+       if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+           CharSequence name = "setAlarmReminderChannel";
+           String description = "Channel for Alarm Manager";
+           int importance = NotificationManager.IMPORTANCE_HIGH;
+           NotificationChannel channel = new NotificationChannel("setAlarm", name, importance);
+           channel.setDescription(description);
+           Log.e(TAG,"ABC:"+channel);
+
+
+           NotificationManager notificationManager = getSystemService(NotificationManager.class);
+           notificationManager.createNotificationChannel(channel);
+       }
+    }
+
 }

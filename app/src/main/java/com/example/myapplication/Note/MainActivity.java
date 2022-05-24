@@ -32,7 +32,7 @@ import java.util.List;
 
 // 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 token github
 
-public class MainActivity extends AppCompatActivity implements NotesListener {
+public class  MainActivity extends AppCompatActivity implements NotesListener {
     // Declare and initialize constant variables
     public static final int REQUEST_CODE_ADD_NOTE = 1;
     public static final int REQUEST_CODE_UPDATE_NOTE = 2;
