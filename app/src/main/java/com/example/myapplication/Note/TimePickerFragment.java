@@ -55,15 +55,13 @@ public class TimePickerFragment extends DialogFragment
         alarmManager = (AlarmManager)this.getContext().getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this.getContext(), AlarmReceiver.class);
 
-        pendingIntent = PendingIntent.getBroadcast(this.getContext(),0,intent,PendingIntent.FLAG_IMMUTABLE);
+        pendingIntent = PendingIntent.getBroadcast(this.getContext(),0,intent,0);
 
         alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         // Do something with the time chosen by the user
-        String time = hourOfDay + ":" + minute;
-                DateField.setText(time);
                 calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 calendar.set(Calendar.MINUTE,minute);
                 calendar.set(Calendar.YEAR,Calendar.MONTH,Calendar.DAY_OF_MONTH);

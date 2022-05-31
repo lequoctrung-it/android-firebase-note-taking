@@ -19,22 +19,17 @@
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_search.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/background_subtitle_indicator.xml" value="0.1375" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/home.xml" value="0.1365" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_back.xml" value="0.141" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_baseline_format_list_bulleted_24.xml" value="0.1455" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_delete.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_grid.xml" value="0.137" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1365" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/ic_pin.xml" value="0.141" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/label.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/rounded_edittext.xml" value="0.1365" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/selector.xml" value="0.1365" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/drawable/unpin.xml" value="0.141" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_editor_note.xml" value="0.264" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_editor_note.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_forgot_password.xml" value="0.1334853090172239" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_login.xml" value="0.24" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_otp.xml" value="0.14150943396226415" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_recycle_bin.xml" value="0.176" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_reset_password_otp.xml" value="0.16983695652173914" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/app_bar_main.xml" value="0.27447916666666666" />
@@ -45,36 +40,36 @@
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/layout_loading_dialog.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/layout_miscellaneous.xml" value="0.1" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/layout_modal.xml" value="0.26811594202898553" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/layout/layout_permanently_delete_note.xml" value="0.2" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/menu/action_menu_main_activity.xml" value="0.264" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/menu/bottom_nav_menu.xml" value="0.27447916666666666" />
         <entry key="..\:/IT/IT-TDTU/Mobile Application Development/Todolist/app/src/main/res/menu/navigation_menu.xml" value="0.2351851851851852" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/background_add_button.xml" value="0.104" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/background_dialog.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/background_modal.xml" value="0.2045" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/background_note.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/background_note_color_1.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/background_subtitle_indicator.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/ic_add.xml" value="0.1" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/ic_back.xml" value="0.231" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/ic_lock.xml" value="0.169" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/login_button.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/rounded_edittext.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/drawable/shape_login.xml" value="0.222" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_editor_note.xml" value="0.536" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_forgot_password.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_login.xml" value="0.4487034949267193" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_main.xml" value="0.152" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_otp.xml" value="0.264" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_recycle_bin.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_reset_password_otp.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/activity_sign_up.xml" value="0.264" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/item_container_note.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/layout_delete_note.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/layout_dialog.xml" value="0.2734375" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/layout_loading_dialog.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/layout_modal.xml" value="0.27447916666666666" />
-        <entry key="..\:/IT/IT-TDTU/Mobile Application Development/todo-list-application/app/src/main/res/layout/layout_permanently_delete_note.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/background_add_button.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/background_dialog.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/background_search.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_add.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_list.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_lock.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_logout.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_music.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_pin.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_play.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/drawable/ic_search.xml" value="0.214" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_editor_note.xml" value="0.22" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_forgot_password.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_login.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_main.xml" value="0.17426545086119555" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_otp.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_recycle_bin.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_reset_password_otp.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/activity_sign_up.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/item_container_note.xml" value="0.5" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/layout_delete_note.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/layout_dialog.xml" value="0.33" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/layout_loading_dialog.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/layout_modal.xml" value="0.25" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/layout/layout_permanently_delete_note.xml" value="0.3625" />
+        <entry key="..\:/Users/Tuan/AndroidStudioProjects/todo-list-application/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.112" />
       </map>
     </option>
   </component>

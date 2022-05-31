@@ -37,6 +37,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NotesListener {
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements NotesListener {
         initializeViews();
 
         manipulateViews();
+
 
         getNotes(REQUEST_CODE_SHOW_NOTES, false);
     }

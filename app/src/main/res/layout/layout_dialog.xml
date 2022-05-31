@@ -18,7 +18,7 @@
         android:src="@drawable/ic_lock"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/color_accent" />
+        app:tint="@color/color_search_icon" />
 
     <TextView
         android:layout_width="0dp"
@@ -27,7 +27,7 @@
         android:fontFamily="@font/poppins_bold"
         android:includeFontPadding="false"
         android:text="@string/enter_password"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_14ssp"
         app:layout_constraintBottom_toBottomOf="@id/iv_note_password"
         app:layout_constraintEnd_toEndOf="parent"

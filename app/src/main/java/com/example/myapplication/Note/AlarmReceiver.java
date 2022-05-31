@@ -19,16 +19,16 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         Intent i = new Intent(context, EditorNoteActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context,0,i,0);
 
         Log.e(TAG,"DC ROI 2");
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context,"setAlarm")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_launcher_background)
-                .setContentTitle("Ghi chú 1")
-                .setContentText("Ối dồi ôi")
+                .setContentTitle("Note")
+                .setContentText("Example")
                 .setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setContentIntent(pendingIntent);
 
         NotificationManagerCompat notificationCompat = NotificationManagerCompat.from(context);

@@ -21,124 +21,6 @@
         android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_13ssp" />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/ll_note_color"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="@dimen/_10sdp"-->
-<!--        android:gravity="center_vertical"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1">-->
-
-<!--            <View-->
-<!--                android:id="@+id/v_color_1"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:background="@drawable/background_note_color_1" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_color_1"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:padding="@dimen/_10sdp"-->
-<!--                android:src="@drawable/ic_done"-->
-<!--                app:tint="@color/color_white" />-->
-<!--        </FrameLayout>-->
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1">-->
-
-<!--            <View-->
-<!--                android:id="@+id/v_color_2"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:background="@drawable/background_note_color_2" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_color_2"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:padding="@dimen/_10sdp"-->
-<!--                app:tint="@color/color_white" />-->
-<!--        </FrameLayout>-->
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1">-->
-
-<!--            <View-->
-<!--                android:id="@+id/v_color_3"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:background="@drawable/background_note_color_3" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_color_3"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:padding="@dimen/_10sdp"-->
-<!--                app:tint="@color/color_white" />-->
-<!--        </FrameLayout>-->
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1">-->
-
-<!--            <View-->
-<!--                android:id="@+id/v_color_4"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:background="@drawable/background_note_color_4" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_color_4"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:padding="@dimen/_10sdp"-->
-<!--                app:tint="@color/color_white" />-->
-<!--        </FrameLayout>-->
-
-<!--        <FrameLayout-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1">-->
-
-<!--            <View-->
-<!--                android:id="@+id/v_color_5"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:background="@drawable/background_note_color_5" />-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/iv_color_5"-->
-<!--                android:layout_width="@dimen/_35sdp"-->
-<!--                android:layout_height="@dimen/_35sdp"-->
-<!--                android:contentDescription="@string/app_name"-->
-<!--                android:padding="@dimen/_10sdp"-->
-<!--                app:tint="@color/color_white" />-->
-<!--        </FrameLayout>-->
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:fontFamily="@font/poppins_medium"-->
-<!--            android:includeFontPadding="false"-->
-<!--            android:text="@string/pick_color"-->
-<!--            android:textColor="@color/color_white"-->
-<!--            android:textSize="@dimen/_13ssp" />-->
-<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ll_add_image"
@@ -271,7 +153,7 @@
             android:layout_height="@dimen/_22sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_share"
-            app:tint="@color/color_accent" />
+            app:tint="@color/color_search_icon" />
 
         <TextView
             android:layout_width="match_parent"
@@ -280,7 +162,7 @@
             android:fontFamily="@font/poppins_medium"
             android:includeFontPadding="false"
             android:text="@string/share_to"
-            android:textColor="@color/color_accent"
+            android:textColor="@color/color_search_icon"
             android:textSize="@dimen/_12ssp" />
     </LinearLayout>
 

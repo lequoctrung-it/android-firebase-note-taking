@@ -19,7 +19,7 @@
         android:src="@drawable/ic_delete"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/color_accent" />
+        app:tint="@color/color_search_icon" />
 
     <TextView
         android:layout_width="0dp"
@@ -28,7 +28,7 @@
         android:fontFamily="@font/poppins_bold"
         android:includeFontPadding="false"
         android:text="@string/delete_note"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_14ssp"
         app:layout_constraintBottom_toBottomOf="@id/iv_delete_note"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
         android:includeFontPadding="false"
         android:paddingHorizontal="@dimen/_8sdp"
         android:text="@string/are_you_sure_you_want_to_delete_this_note"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintTop_toBottomOf="@id/iv_delete_note"
         tools:layout_editor_absoluteX="10dp" />
@@ -78,7 +78,7 @@
         android:includeFontPadding="false"
         android:padding="@dimen/_8sdp"
         android:text="@string/cancel_dialog"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_13ssp"
         android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -29,7 +29,7 @@
         android:includeFontPadding="false"
         android:paddingHorizontal="@dimen/_8sdp"
         android:text="@string/loading"
-        android:textColor="@color/color_accent"
+        android:textColor="@color/color_search_icon"
         android:textSize="@dimen/_13ssp"
         app:layout_constraintLeft_toLeftOf="@id/cl_loading_container"
         app:layout_constraintRight_toRightOf="@id/cl_loading_container"
